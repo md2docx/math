@@ -170,6 +170,9 @@ importers:
       latex-math:
         specifier: ^0.0.2
         version: 0.0.2
+      remark-math:
+        specifier: ^6.0.0
+        version: 6.0.0
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -207,9 +210,6 @@ importers:
       jsdom:
         specifier: ^26.0.0
         version: 26.0.0
-      remark-gfm:
-        specifier: ^4.0.1
-        version: 4.0.1
       remark-parse:
         specifier: ^11.0.0
         version: 11.0.0

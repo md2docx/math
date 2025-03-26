@@ -4,6 +4,8 @@
 
 > A plugin that transforms LaTeX-style math (inline and block) into DOCX-compatible equations using docx.
 
+> This package expects that the math nodes have already been extracted using `remark-math` plugin.
+
 ---
 
 ## 📦 Installation
