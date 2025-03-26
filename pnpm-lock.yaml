@@ -24,9 +24,6 @@ importers:
       '@types/node':
         specifier: ^22.13.12
         version: 22.13.12
-      enquirer:
-        specifier: ^2.4.1
-        version: 2.4.1
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -40,6 +37,9 @@ importers:
         specifier: latest
         version: 0.0.3(docx@9.3.0)
       '@m2d/emoji':
+        specifier: latest
+        version: 0.1.0(docx@9.3.0)
+      '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
       '@repo/shared':
@@ -113,6 +113,9 @@ importers:
         specifier: latest
         version: 0.0.3(docx@9.3.0)
       '@m2d/emoji':
+        specifier: latest
+        version: 0.1.0(docx@9.3.0)
+      '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
       '@repo/shared':
@@ -164,6 +167,12 @@ importers:
       '@m2d/core':
         specifier: ^0.0.3
         version: 0.0.3(docx@9.3.0)
+      latex-math:
+        specifier: ^0.0.2
+        version: 0.0.2
+      remark-math:
+        specifier: ^6.0.0
+        version: 6.0.0
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -183,6 +192,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.12)
+      '@unified-latex/unified-latex-types':
+        specifier: ^1.8.0
+        version: 1.8.0
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.3.4(vite@6.2.2(@types/node@22.13.12)(sass@1.86.0)(yaml@2.7.0))
@@ -198,9 +210,6 @@ importers:
       jsdom:
         specifier: ^26.0.0
         version: 26.0.0
-      remark-gfm:
-        specifier: ^4.0.1
-        version: 4.0.1
       remark-parse:
         specifier: ^11.0.0
         version: 11.0.0
@@ -267,6 +276,9 @@ importers:
         specifier: latest
         version: 0.0.3(docx@9.3.0)
       '@m2d/emoji':
+        specifier: latest
+        version: 0.1.0(docx@9.3.0)
+      '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
       '@mayank1513/fork-me':
@@ -898,6 +910,11 @@ packages:
     peerDependencies:
       docx: ^9.3.0
 
+  '@m2d/emoji@0.1.0':
+    resolution: {integrity: sha512-9o4zUGvklus45ERs2lnqTKZK5htntqPVLR9NGWQtB3pinsFWOoMfFv7rGL3bwS1wqIYjWL6Ueyp8ulM8+QLn2g==}
+    peerDependencies:
+      docx: ^9.3.0
+
   '@m2d/mdast@0.0.2':
     resolution: {integrity: sha512-rt3I7maptlrfFn2kY4yKTErDrhFcRoQNobwDQcOdR0i3la66PbZ5D9p0KF20IUsD3p6ExAuZTUt9HKyeQ8jd8g==}
     peerDependencies:
@@ -1301,6 +1318,9 @@ packages:
   '@typescript-eslint/visitor-keys@8.27.0':
     resolution: {integrity: sha512-WsXQwMkILJvffP6z4U3FYJPlbf/j07HIxmDjZpbNvBJkMfvwXj5ACRkkHwBDvLBbDbtX5TdU64/rcvKJ/vuInQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@unified-latex/unified-latex-types@1.8.0':
+    resolution: {integrity: sha512-GLJbBmmfDOWtdEbpQCLb7++zPxXin36aC9XOVCuiVNMR9VYv3szOJa+ZdTilVCFHpOeFhKh6zRws96vJgz2tGA==}
 
   '@vitejs/plugin-react@4.3.4':
     resolution: {integrity: sha512-SCCPBJtYLdE8PX/7ZQAs1QAZ8Jqwih+0VBLum1EGqmCCQal+MIUqLCzj3ZUy8ufbC0cAM4LRlSTm7IQJwWT4ug==}
@@ -2338,6 +2358,9 @@ packages:
 
   latex-math@0.0.1:
     resolution: {integrity: sha512-0euHNguo2I0izp/ATru6g9uNSHeTddKM74iafF1bEnovlUj5GwIrZ53s6ei1w1BSlXdtjnP5XecoukY6MKXNew==}
+
+  latex-math@0.0.2:
+    resolution: {integrity: sha512-tJbCMbMhkeocxkx5H9pGISfay6pctCmcZW7yajYe3KrytIxIChqlAw1cvp9VlobNZC27LeV0PoChM96xa0ATew==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -4214,6 +4237,11 @@ snapshots:
       '@m2d/mdast': 0.0.2(docx@9.3.0)
       docx: 9.3.0
 
+  '@m2d/emoji@0.1.0(docx@9.3.0)':
+    dependencies:
+      '@m2d/core': 0.0.3(docx@9.3.0)
+      docx: 9.3.0
+
   '@m2d/mdast@0.0.2(docx@9.3.0)':
     dependencies:
       docx: 9.3.0
@@ -4573,6 +4601,8 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.27.0
       eslint-visitor-keys: 4.2.0
+
+  '@unified-latex/unified-latex-types@1.8.0': {}
 
   '@vitejs/plugin-react@4.3.4(vite@6.2.2(@types/node@22.13.12)(sass@1.86.0)(yaml@2.7.0))':
     dependencies:
@@ -5791,6 +5821,10 @@ snapshots:
       json-buffer: 3.0.1
 
   latex-math@0.0.1:
+    dependencies:
+      unified: 11.0.5
+
+  latex-math@0.0.2:
     dependencies:
       unified: 11.0.5
 

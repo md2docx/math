@@ -15,13 +15,8 @@ import { useState } from "react";
 // import { remarkDocx } from "@m2d/remark-docx";
 import { toDocx } from "mdast2docx";
 import { emojiPlugin } from "@m2d/emoji";
-import {
-  tablePlugin,
-  listPlugin,
-  mathPlugin,
-  imagePlugin,
-  htmlPlugin,
-} from "mdast2docx/dist/plugins";
+import { mathPlugin } from "@m2d/math";
+import { tablePlugin, listPlugin, imagePlugin, htmlPlugin } from "mdast2docx/dist/plugins";
 
 /** React live demo */
 export function Demo() {

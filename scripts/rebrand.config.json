@@ -1,6 +1,6 @@
 {
-  "packageName": "@m2d/emoji",
+  "packageName": "@m2d/math",
   "owner": "md2docx",
-  "repo": "md2docx-plugin-template",
-  "title": "Md2docx Plugin Template"
+  "repo": "math",
+  "title": "@m2d/math"
 }
