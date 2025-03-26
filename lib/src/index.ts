@@ -8,9 +8,8 @@ import type * as latex from "@unified-latex/unified-latex-types";
 /**
  * Checks if the argument has curly brackets.
  */
-const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argument => {
-  return Boolean(arg && arg.openMark === "{" && arg.closeMark === "}");
-};
+const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argument =>
+  Boolean(arg && arg.openMark === "{" && arg.closeMark === "}");
 
 /** convert to MathRun */
 const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun => new docx.MathRun(s);
