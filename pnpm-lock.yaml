@@ -65,7 +65,7 @@ importers:
         version: 19.1.0(react@19.1.0)
       react18-loaders:
         specifier: ^1.1.4
-        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
+        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
       remark-frontmatter:
         specifier: ^5.0.0
         version: 5.0.0
@@ -135,7 +135,7 @@ importers:
         version: 0.0.5(@types/react@19.1.0)(react@19.1.0)
       react18-loaders:
         specifier: ^1.1.4
-        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
+        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
       react18-themes:
         specifier: ^3.2.0
         version: 3.2.0(@types/react@19.1.0)(next@15.2.4(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
@@ -165,8 +165,8 @@ importers:
   lib:
     dependencies:
       '@m2d/core':
-        specifier: ^0.0.3
-        version: 0.0.3(docx@9.3.0)
+        specifier: ^0.0.4
+        version: 0.0.4(docx@9.3.0)
       latex-math:
         specifier: ^0.0.2
         version: 0.0.2
@@ -307,7 +307,7 @@ importers:
         version: 4.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react18-loaders:
         specifier: ^1.1.4
-        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
+        version: 1.1.4(@types/react@19.1.0)(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0)
       remark-frontmatter:
         specifier: ^5.0.0
         version: 5.0.0
@@ -914,6 +914,11 @@ packages:
     peerDependencies:
       docx: ^9.3.0
 
+  '@m2d/core@0.0.4':
+    resolution: {integrity: sha512-2zL8XX3UPXaoC5AswGEixSg82JpEqhVn4vrmHCfVDpToKtH6DWiLDFQIsqKxYae9HlrREffS+gvwdBL+C+KMFw==}
+    peerDependencies:
+      docx: ^9.3.0
+
   '@m2d/emoji@0.1.0':
     resolution: {integrity: sha512-9o4zUGvklus45ERs2lnqTKZK5htntqPVLR9NGWQtB3pinsFWOoMfFv7rGL3bwS1wqIYjWL6Ueyp8ulM8+QLn2g==}
     peerDependencies:
@@ -942,6 +947,11 @@ packages:
 
   '@m2d/mdast@0.0.2':
     resolution: {integrity: sha512-rt3I7maptlrfFn2kY4yKTErDrhFcRoQNobwDQcOdR0i3la66PbZ5D9p0KF20IUsD3p6ExAuZTUt9HKyeQ8jd8g==}
+    peerDependencies:
+      docx: ^9.3.0
+
+  '@m2d/mdast@0.1.1':
+    resolution: {integrity: sha512-K5lsqsaKU8/u3V/29VS3ooX3H1CMemJw4En1F++oXKh4AYJUd+zopa/bYPueFMh/ubafS6iHxZgIT4FIRl+/4Q==}
     peerDependencies:
       docx: ^9.3.0
 
@@ -4263,6 +4273,11 @@ snapshots:
       '@m2d/mdast': 0.0.2(docx@9.3.0)
       docx: 9.3.0
 
+  '@m2d/core@0.0.4(docx@9.3.0)':
+    dependencies:
+      '@m2d/mdast': 0.1.1(docx@9.3.0)
+      docx: 9.3.0
+
   '@m2d/emoji@0.1.0(docx@9.3.0)':
     dependencies:
       '@m2d/core': 0.0.3(docx@9.3.0)
@@ -4291,6 +4306,10 @@ snapshots:
       remark-math: 6.0.0
 
   '@m2d/mdast@0.0.2(docx@9.3.0)':
+    dependencies:
+      docx: 9.3.0
+
+  '@m2d/mdast@0.1.1(docx@9.3.0)':
     dependencies:
       docx: 9.3.0
 
@@ -6648,7 +6667,7 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
-  react18-loaders@1.1.4(@types/react@19.1.0)(next@15.2.4(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0):
+  react18-loaders@1.1.4(@types/react@19.1.0)(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.86.3))(react@19.1.0):
     dependencies:
       '@types/react': 19.1.0
       r18gs: 2.1.0(@types/react@19.1.0)(react@19.1.0)
