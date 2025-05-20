@@ -4,7 +4,11 @@ const path = require("path");
 const packageJSON = require("../package.json");
 
 // Update pnpm to latest version
-execSync("pnpm self-update");
+try {
+  execSync("pnpm self-update");
+} catch (err) {
+  console.log("Failed to update pnpm to latest version: ", err);
+}
 
 const PNPM_VERSION = execSync("pnpm -v").toString().trim();
 packageJSON.packageManager = `pnpm@${PNPM_VERSION}`;

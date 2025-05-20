@@ -25,6 +25,7 @@ export const GET = async () => {
   const buffer = await toDocx(
     mdast,
     {},
+    // @ts-expect-error -- WIP
     { plugins: [tablePlugin(), listPlugin(), mathPlugin(), emojiPlugin()] },
     "arraybuffer",
   );

@@ -278,7 +278,7 @@ const mapMacro = (
     case "hat":
     case "widehat":
       // returnVal = docx.MathAccentCharacter(n)
-      returnVal = new docx.MathAccentCharacter("^");
+      returnVal = docx.createMathAccentCharacter({ accent: "^" });
       break;
     case "sum": {
       const docNode = new docx.MathSum({
@@ -420,15 +420,15 @@ export const mathPlugin: () => IPlugin<{
   value?: string;
 }> = () => {
   return {
-    inline: async (docx, node) => {
+    inline: (docx, node) => {
       if (node.type !== "inlineMath" && node.type !== "math") return [];
       node.type = "";
-      return [new docx.Math({ children: await parseLatex(docx, node.value ?? "").flat() })];
+      return [new docx.Math({ children: parseLatex(docx, node.value ?? "").flat() })];
     },
-    block: async (docx, node) => {
+    block: (docx, node) => {
       if (node.type !== "math" && node.type !== "inlineMath") return [];
       node.type = "";
-      return await parseLatex(docx, node.value ?? "").map(
+      return parseLatex(docx, node.value ?? "").map(
         runs => new docx.Paragraph({ children: [new docx.Math({ children: runs })] }),
       );
     },
