@@ -2,7 +2,7 @@
   "name": "@m2d/math",
   "author": "Mayank Kumar Chaudhari (https://mayank-chaudhari.vercel.app)",
   "private": false,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Plugin to convert mathematical expressions in Markdown (MDAST) to DOCX using LaTeX-style syntax. Integrates seamlessly with mdast2docx.",
   "license": "MPL-2.0",
   "main": "./dist/index.js",
