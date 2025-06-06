@@ -1,4 +1,4 @@
-import { IPlugin } from "@m2d/core";
+import { EmptyNode, IPlugin } from "@m2d/core";
 import { parseMath } from "latex-math";
 // skipcq: JS-C1003
 import * as DOCX from "docx";
@@ -422,6 +422,7 @@ export const mathPlugin: () => IPlugin<{
   return {
     inline: (docx, node) => {
       if (node.type !== "inlineMath" && node.type !== "math") return [];
+      (node as unknown as EmptyNode)._type = node.type;
       node.type = "";
       return [new docx.Math({ children: parseLatex(docx, node.value ?? "").flat() })];
     },
