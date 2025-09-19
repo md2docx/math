@@ -52,7 +52,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@m2d/core": "^1.5.0",
+    "@m2d/core": "^1.6.0",
     "latex-math": "^0.0.2"
   },
   "peerDependencies": {
