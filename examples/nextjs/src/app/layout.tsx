@@ -4,7 +4,7 @@ import { Core } from "nextjs-darkmode-lite";
 import { Layout } from "@repo/shared/dist/server";
 import { GlobalLoader, Header } from "@repo/shared";
 import { Inter } from "next/font/google";
-import Link from "next/link";
+// import Link from "next/link";
 import { Particles } from "webgl-generative-particles/react";
 import { ReactNode } from "react";
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
       <body className={inter.className}>
         <Core />
         <Layout>
-          <Header linkComponent={Link} />
+          {/* <Header linkComponent={Link} /> */}
           {children}
         </Layout>
         <GlobalLoader />
