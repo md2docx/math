@@ -40,7 +40,7 @@
     "@types/react-dom": "^19.2.3",
     "@unified-latex/unified-latex-types": "^1.8.0",
     "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^4.0.9",
+    "@vitest/coverage-v8": "^4.0.10",
     "docx": "^9.5.1",
     "esbuild-plugin-rdi": "^0.0.0",
     "jsdom": "^27.2.0",
@@ -49,7 +49,7 @@
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.9"
+    "vitest": "^4.0.10"
   },
   "dependencies": {
     "@m2d/core": "^1.7.1",
