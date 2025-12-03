@@ -17,11 +17,11 @@
     "@m2d/math": "workspace:*",
     "@repo/shared": "workspace:*",
     "mdast2docx": "1.6.1",
-    "next": "^16.0.6",
+    "next": "^16.0.7",
     "nextjs-darkmode-lite": "^1.0.10",
     "nextjs-themes": "^4.0.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react18-loaders": "^1.1.12",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
@@ -31,7 +31,7 @@
     "webgl-generative-particles": "^0.0.1"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.0.6",
+    "@next/eslint-plugin-next": "^16.0.7",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^24.10.1",
