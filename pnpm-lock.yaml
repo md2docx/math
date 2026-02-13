@@ -35,10 +35,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.5.1)
+        version: 1.7.1(docx@9.5.2)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.5.1)
+        version: 0.1.3(docx@9.5.2)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -111,10 +111,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.5.1)
+        version: 1.7.1(docx@9.5.2)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.5.1)
+        version: 0.1.3(docx@9.5.2)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -166,7 +166,7 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.5.1)
+        version: 1.7.1(docx@9.5.2)
       latex-math:
         specifier: ^0.0.2
         version: 0.0.2
@@ -202,8 +202,8 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(vitest@4.0.18(@types/node@25.2.3)(happy-dom@17.4.7)(jsdom@28.0.0)(sass@1.97.3)(yaml@2.7.0))
       docx:
-        specifier: ^9.5.1
-        version: 9.5.1
+        specifier: ^9.5.2
+        version: 9.5.2
       esbuild-plugin-rdi:
         specifier: ^0.0.0
         version: 0.0.0
@@ -274,10 +274,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.5.1)
+        version: 1.7.1(docx@9.5.2)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.5.1)
+        version: 0.1.3(docx@9.5.2)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -572,8 +572,8 @@ packages:
     resolution: {integrity: sha512-NmXRccUJMk2AWA5A7e5a//3bCIMyOu2hAtdRYrhPPHjDxINuCwX1w6rnIZ4xjLcp0ayv6h8Pc3X0eJUGiAAXHQ==}
     engines: {node: '>=20.19.0'}
 
-  '@csstools/css-calc@3.1.0':
-    resolution: {integrity: sha512-JWouqB5za07FUA2iXZWq4gPXNGWXjRwlfwEXNr7cSsGr7OKgzhDVwkJjlsrbqSyFmDGSi1Rt7zs8ln87jX9yRg==}
+  '@csstools/css-calc@3.1.1':
+    resolution: {integrity: sha512-HJ26Z/vmsZQqs/o3a6bgKslXGFAungXGbinULZO3eMsOyNJHeBBZfup5FiZInOghgoM4Hwnmw+OgbJCNg1wwUQ==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@csstools/css-parser-algorithms': ^4.0.0
@@ -788,8 +788,8 @@ packages:
     resolution: {integrity: sha512-bIZEUzOI1jkhviX2cp5vNyXQc6olzb2ohewQubuYlMXZ2Q/XjBO0x0XhGPvc9fjSIiUN0vw+0hq53BJ4eQSJKQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@exodus/bytes@1.14.0':
-    resolution: {integrity: sha512-YiY1OmY6Qhkvmly8vZiD8wZRpW/npGZNg+0Sk8mstxirRHCg6lolHt5tSODCfuNPE/fBsAqRwDJE417x7jDDHA==}
+  '@exodus/bytes@1.14.1':
+    resolution: {integrity: sha512-OhkBFWI6GcRMUroChZiopRiSp2iAMvEBK47NhJooDqz1RERO4QuZIZnjP63TXX8GAiLABkYmX+fuQsdJ1dd2QQ==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@noble/hashes': ^1.8.0 || ^2.0.0
@@ -2233,8 +2233,8 @@ packages:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
 
-  docx@9.5.1:
-    resolution: {integrity: sha512-ABDI7JEirFD2+bHhOBlsGZxaG1UgZb2M/QMKhLSDGgVNhxDesTCDcP+qoDnDGjZ4EOXTRfUjUgwHVuZ6VSTfWQ==}
+  docx@9.5.2:
+    resolution: {integrity: sha512-IJDqLzYeCGtnHJRtljEHCX/v9aQS0jgzpyD3BSxClEepFfn4h/H/5RVRminu05Kf4e29oMDZKRGyQo/5nQZmMg==}
     engines: {node: '>=10'}
 
   dom-accessibility-api@0.5.16:
@@ -4257,7 +4257,7 @@ snapshots:
 
   '@asamuzakjp/css-color@4.1.2':
     dependencies:
-      '@csstools/css-calc': 3.1.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
+      '@csstools/css-calc': 3.1.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-color-parser': 4.0.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
@@ -4554,7 +4554,7 @@ snapshots:
 
   '@csstools/color-helpers@6.0.1': {}
 
-  '@csstools/css-calc@3.1.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
+  '@csstools/css-calc@3.1.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
@@ -4562,7 +4562,7 @@ snapshots:
   '@csstools/css-color-parser@4.0.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/color-helpers': 6.0.1
-      '@csstools/css-calc': 3.1.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
+      '@csstools/css-calc': 3.1.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
 
@@ -4687,7 +4687,7 @@ snapshots:
       '@eslint/core': 1.1.0
       levn: 0.4.1
 
-  '@exodus/bytes@1.14.0': {}
+  '@exodus/bytes@1.14.1': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -4833,57 +4833,57 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@m2d/core@1.7.1(docx@9.5.1)':
+  '@m2d/core@1.7.1(docx@9.5.2)':
     dependencies:
-      '@m2d/mdast': 0.2.4(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/mdast': 0.2.4(docx@9.5.2)
+      docx: 9.5.2
 
-  '@m2d/emoji@0.1.3(docx@9.5.1)':
+  '@m2d/emoji@0.1.3(docx@9.5.2)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
 
-  '@m2d/html@1.1.11(docx@9.5.1)':
+  '@m2d/html@1.1.11(docx@9.5.2)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
 
-  '@m2d/image@1.4.1(docx@9.5.1)(sharp@0.34.5)':
+  '@m2d/image@1.4.1(docx@9.5.2)(sharp@0.34.5)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
+      '@m2d/core': 1.7.1(docx@9.5.2)
       '@svg-fns/io': 1.0.1
       '@svg-fns/svg2img': 0.0.0(sharp@0.34.5)
-      docx: 9.5.1
+      docx: 9.5.2
     transitivePeerDependencies:
       - '@xmldom/xmldom'
       - sharp
 
-  '@m2d/list@0.0.9(docx@9.5.1)':
+  '@m2d/list@0.0.9(docx@9.5.2)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
 
-  '@m2d/math@0.0.6(docx@9.5.1)(remark-math@6.0.0)':
+  '@m2d/math@0.0.6(docx@9.5.2)(remark-math@6.0.0)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
       latex-math: 0.0.2
       remark-math: 6.0.0
 
-  '@m2d/mdast@0.2.4(docx@9.5.1)':
+  '@m2d/mdast@0.2.4(docx@9.5.2)':
     dependencies:
-      docx: 9.5.1
+      docx: 9.5.2
 
-  '@m2d/mermaid@1.2.2(docx@9.5.1)':
+  '@m2d/mermaid@1.2.2(docx@9.5.2)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
       mermaid: 11.12.2
 
-  '@m2d/table@0.1.1(docx@9.5.1)':
+  '@m2d/table@0.1.1(docx@9.5.2)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      docx: 9.5.2
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -6050,7 +6050,7 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
-  docx@9.5.1:
+  docx@9.5.2:
     dependencies:
       '@types/node': 24.10.13
       hash.js: 1.1.7
@@ -6562,7 +6562,7 @@ snapshots:
 
   html-encoding-sniffer@6.0.0:
     dependencies:
-      '@exodus/bytes': 1.14.0
+      '@exodus/bytes': 1.14.1
     transitivePeerDependencies:
       - '@noble/hashes'
 
@@ -6787,7 +6787,7 @@ snapshots:
     dependencies:
       '@acemir/cssom': 0.9.31
       '@asamuzakjp/dom-selector': 6.7.8
-      '@exodus/bytes': 1.14.0
+      '@exodus/bytes': 1.14.1
       cssstyle: 5.3.7
       data-urls: 7.0.0
       decimal.js: 10.6.0
@@ -7062,15 +7062,15 @@ snapshots:
 
   mdast2docx@1.6.1(remark-math@6.0.0)(sharp@0.34.5):
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.5.1)
-      '@m2d/emoji': 0.1.3(docx@9.5.1)
-      '@m2d/html': 1.1.11(docx@9.5.1)
-      '@m2d/image': 1.4.1(docx@9.5.1)(sharp@0.34.5)
-      '@m2d/list': 0.0.9(docx@9.5.1)
-      '@m2d/math': 0.0.6(docx@9.5.1)(remark-math@6.0.0)
-      '@m2d/mermaid': 1.2.2(docx@9.5.1)
-      '@m2d/table': 0.1.1(docx@9.5.1)
-      docx: 9.5.1
+      '@m2d/core': 1.7.1(docx@9.5.2)
+      '@m2d/emoji': 0.1.3(docx@9.5.2)
+      '@m2d/html': 1.1.11(docx@9.5.2)
+      '@m2d/image': 1.4.1(docx@9.5.2)(sharp@0.34.5)
+      '@m2d/list': 0.0.9(docx@9.5.2)
+      '@m2d/math': 0.0.6(docx@9.5.2)(remark-math@6.0.0)
+      '@m2d/mermaid': 1.2.2(docx@9.5.2)
+      '@m2d/table': 0.1.1(docx@9.5.2)
+      docx: 9.5.2
     transitivePeerDependencies:
       - '@xmldom/xmldom'
       - remark-math
@@ -8449,7 +8449,7 @@ snapshots:
 
   whatwg-url@16.0.0:
     dependencies:
-      '@exodus/bytes': 1.14.0
+      '@exodus/bytes': 1.14.1
       tr46: 6.0.0
       webidl-conversions: 8.0.1
     transitivePeerDependencies:
