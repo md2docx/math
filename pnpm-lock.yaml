@@ -35,10 +35,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.6.0)
+        version: 1.7.1(docx@9.6.1)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.6.0)
+        version: 0.1.3(docx@9.6.1)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -111,10 +111,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.6.0)
+        version: 1.7.1(docx@9.6.1)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.6.0)
+        version: 0.1.3(docx@9.6.1)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -166,7 +166,7 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.6.0)
+        version: 1.7.1(docx@9.6.1)
       latex-math:
         specifier: ^0.0.2
         version: 0.0.2
@@ -202,8 +202,8 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(vitest@4.0.18(@types/node@25.4.0)(happy-dom@17.4.7)(jsdom@28.1.0)(sass@1.97.3)(yaml@2.7.0))
       docx:
-        specifier: ^9.6.0
-        version: 9.6.0
+        specifier: ^9.6.1
+        version: 9.6.1
       esbuild-plugin-rdi:
         specifier: ^0.0.0
         version: 0.0.0
@@ -274,10 +274,10 @@ importers:
     dependencies:
       '@m2d/core':
         specifier: ^1.7.1
-        version: 1.7.1(docx@9.6.0)
+        version: 1.7.1(docx@9.6.1)
       '@m2d/emoji':
         specifier: ^0.1.3
-        version: 0.1.3(docx@9.6.0)
+        version: 0.1.3(docx@9.6.1)
       '@m2d/math':
         specifier: workspace:*
         version: link:../../lib
@@ -2228,8 +2228,8 @@ packages:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
 
-  docx@9.6.0:
-    resolution: {integrity: sha512-y6EaJJMDvt4P7wgGQB9KsZf4wsRkQMJfkc9LlNufRshggI5BT35hGNkXBCAeEoI3MLMwApKguxzjdqqVcBCqNA==}
+  docx@9.6.1:
+    resolution: {integrity: sha512-ZJja9/KBUuFC109sCMzovoq2GR2wCG/AuxivjA+OHj/q0TEgJIm3S7yrlUxIy3B+bV8YDj/BiHfWyrRFmyWpDQ==}
     engines: {node: '>=10'}
 
   dom-accessibility-api@0.5.16:
@@ -4819,57 +4819,57 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@m2d/core@1.7.1(docx@9.6.0)':
+  '@m2d/core@1.7.1(docx@9.6.1)':
     dependencies:
-      '@m2d/mdast': 0.2.4(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/mdast': 0.2.4(docx@9.6.1)
+      docx: 9.6.1
 
-  '@m2d/emoji@0.1.3(docx@9.6.0)':
+  '@m2d/emoji@0.1.3(docx@9.6.1)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
 
-  '@m2d/html@1.1.11(docx@9.6.0)':
+  '@m2d/html@1.1.11(docx@9.6.1)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
 
-  '@m2d/image@1.4.1(docx@9.6.0)(sharp@0.34.5)':
+  '@m2d/image@1.4.1(docx@9.6.1)(sharp@0.34.5)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
+      '@m2d/core': 1.7.1(docx@9.6.1)
       '@svg-fns/io': 1.0.1
       '@svg-fns/svg2img': 0.0.0(sharp@0.34.5)
-      docx: 9.6.0
+      docx: 9.6.1
     transitivePeerDependencies:
       - '@xmldom/xmldom'
       - sharp
 
-  '@m2d/list@0.0.9(docx@9.6.0)':
+  '@m2d/list@0.0.9(docx@9.6.1)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
 
-  '@m2d/math@0.0.6(docx@9.6.0)(remark-math@6.0.0)':
+  '@m2d/math@0.0.6(docx@9.6.1)(remark-math@6.0.0)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
       latex-math: 0.0.2
       remark-math: 6.0.0
 
-  '@m2d/mdast@0.2.4(docx@9.6.0)':
+  '@m2d/mdast@0.2.4(docx@9.6.1)':
     dependencies:
-      docx: 9.6.0
+      docx: 9.6.1
 
-  '@m2d/mermaid@1.2.2(docx@9.6.0)':
+  '@m2d/mermaid@1.2.2(docx@9.6.1)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
       mermaid: 11.13.0
 
-  '@m2d/table@0.1.1(docx@9.6.0)':
+  '@m2d/table@0.1.1(docx@9.6.1)':
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      docx: 9.6.1
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -6029,7 +6029,7 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
-  docx@9.6.0:
+  docx@9.6.1:
     dependencies:
       '@types/node': 25.4.0
       hash.js: 1.1.7
@@ -7034,15 +7034,15 @@ snapshots:
 
   mdast2docx@1.6.1(remark-math@6.0.0)(sharp@0.34.5):
     dependencies:
-      '@m2d/core': 1.7.1(docx@9.6.0)
-      '@m2d/emoji': 0.1.3(docx@9.6.0)
-      '@m2d/html': 1.1.11(docx@9.6.0)
-      '@m2d/image': 1.4.1(docx@9.6.0)(sharp@0.34.5)
-      '@m2d/list': 0.0.9(docx@9.6.0)
-      '@m2d/math': 0.0.6(docx@9.6.0)(remark-math@6.0.0)
-      '@m2d/mermaid': 1.2.2(docx@9.6.0)
-      '@m2d/table': 0.1.1(docx@9.6.0)
-      docx: 9.6.0
+      '@m2d/core': 1.7.1(docx@9.6.1)
+      '@m2d/emoji': 0.1.3(docx@9.6.1)
+      '@m2d/html': 1.1.11(docx@9.6.1)
+      '@m2d/image': 1.4.1(docx@9.6.1)(sharp@0.34.5)
+      '@m2d/list': 0.0.9(docx@9.6.1)
+      '@m2d/math': 0.0.6(docx@9.6.1)(remark-math@6.0.0)
+      '@m2d/mermaid': 1.2.2(docx@9.6.1)
+      '@m2d/table': 0.1.1(docx@9.6.1)
+      docx: 9.6.1
     transitivePeerDependencies:
       - '@xmldom/xmldom'
       - remark-math
