@@ -43,7 +43,7 @@
     "@vitest/coverage-v8": "^4.1.0",
     "docx": "^9.6.1",
     "esbuild-plugin-rdi": "^0.0.0",
-    "jsdom": "^29.0.0",
+    "jsdom": "^29.0.1",
     "remark-parse": "^11.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
