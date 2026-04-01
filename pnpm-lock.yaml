@@ -1005,8 +1005,8 @@ packages:
       next:
         optional: true
 
-  '@mermaid-js/parser@1.0.1':
-    resolution: {integrity: sha512-opmV19kN1JsK0T6HhhokHpcVkqKpF+x2pPDKKM2ThHtZAB5F4PROopk0amuVYK5qMrIA4erzpNm8gmPNJgMDxQ==}
+  '@mermaid-js/parser@1.1.0':
+    resolution: {integrity: sha512-gxK9ZX2+Fex5zu8LhRQoMeMPEHbc73UKZ0FQ54YrQtUxE1VVhMwzeNtKRPAu5aXks4FasbMe4xB4bWrmq6Jlxw==}
 
   '@napi-rs/wasm-runtime@1.1.2':
     resolution: {integrity: sha512-sNXv5oLJ7ob93xkZ1XnxisYhGYXfaG9f65/ZgYuAu3qt7b3NadcOEhLvx28hv31PgX8SZJRYrAIPQilQmFpLVw==}
@@ -3168,8 +3168,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mermaid@11.13.0:
-    resolution: {integrity: sha512-fEnci+Immw6lKMFI8sqzjlATTyjLkRa6axrEgLV2yHTfv8r+h1wjFbV6xeRtd4rUV1cS4EpR9rwp3Rci7TRWDw==}
+  mermaid@11.14.0:
+    resolution: {integrity: sha512-GSGloRsBs+JINmmhl0JDwjpuezCsHB4WGI4NASHxL3fHo3o/BRXTxhDLKnln8/Q0lRFRyDdEjmk1/d5Sn1Xz8g==}
 
   micromark-core-commonmark@2.0.3:
     resolution: {integrity: sha512-RDBrHEMSxVFLg6xvnXmb1Ayr2WzLAWjeSATAoxwKYJV94TeNavgoIdA0a9ytzDSVzBy2YKFK+emCPOEibLeCrg==}
@@ -4071,8 +4071,8 @@ packages:
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
-  undici@7.24.6:
-    resolution: {integrity: sha512-Xi4agocCbRzt0yYMZGMA6ApD7gvtUFaxm4ZmeacWI4cZxaF6C+8I8QfofC20NAePiB/IcvZmzkJ7XPa471AEtA==}
+  undici@7.24.7:
+    resolution: {integrity: sha512-H/nlJ/h0ggGC+uRL3ovD+G0i4bqhvsDOpbDv7At5eFLlj2b41L8QliGbnl2H7SnDiYhENphh1tQFJZf+MyfLsQ==}
     engines: {node: '>=20.18.1'}
 
   unified@11.0.5:
@@ -4961,7 +4961,7 @@ snapshots:
     dependencies:
       '@m2d/core': 1.7.1(docx@9.6.1)
       docx: 9.6.1
-      mermaid: 11.13.0
+      mermaid: 11.14.0
 
   '@m2d/table@0.1.1(docx@9.6.1)':
     dependencies:
@@ -4991,7 +4991,7 @@ snapshots:
     optionalDependencies:
       next: 15.5.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.98.0)
 
-  '@mermaid-js/parser@1.0.1':
+  '@mermaid-js/parser@1.1.0':
     dependencies:
       langium: 4.2.1
 
@@ -6930,7 +6930,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.24.6
+      undici: 7.24.7
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -7257,11 +7257,11 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid@11.13.0:
+  mermaid@11.14.0:
     dependencies:
       '@braintree/sanitize-url': 7.1.2
       '@iconify/utils': 3.1.0
-      '@mermaid-js/parser': 1.0.1
+      '@mermaid-js/parser': 1.1.0
       '@types/d3': 7.4.3
       '@upsetjs/venn.js': 2.0.0
       cytoscape: 3.33.1
@@ -8454,7 +8454,7 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  undici@7.24.6: {}
+  undici@7.24.7: {}
 
   unified@11.0.5:
     dependencies:
