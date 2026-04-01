@@ -110,61 +110,6 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
 
-  examples/vite:
-    dependencies:
-      '@m2d/core':
-        specifier: ^1.7.1
-        version: 1.7.1(docx@9.6.1)
-      '@m2d/emoji':
-        specifier: ^0.1.3
-        version: 0.1.3(docx@9.6.1)
-      '@m2d/math':
-        specifier: workspace:*
-        version: link:../../lib
-      '@repo/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      nextjs-darkmode:
-        specifier: ^1.0.10
-        version: 1.0.10(@types/react@19.2.14)(react@19.2.4)
-      react:
-        specifier: ^19.2.4
-        version: 19.2.4
-      react-dom:
-        specifier: ^19.2.4
-        version: 19.2.4(react@19.2.4)
-      react-mouse-trails:
-        specifier: ^0.0.5
-        version: 0.0.5(@types/react@19.2.14)(react@19.2.4)
-      react18-loaders:
-        specifier: ^1.1.12
-        version: 1.1.12(@types/react@19.2.14)(react@19.2.4)
-      react18-themes:
-        specifier: ^3.2.0
-        version: 3.2.0(@types/react@19.2.14)(react@19.2.4)
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/config-typescript
-      '@types/react':
-        specifier: ^19.2.14
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.14)
-      '@vitejs/plugin-react':
-        specifier: ^6.0.1
-        version: 6.0.1(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(sass@1.98.0)(yaml@2.7.0))
-      typescript:
-        specifier: ^6.0.2
-        version: 6.0.2
-      vite:
-        specifier: ^8.0.3
-        version: 8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@25.5.0)(esbuild@0.27.4)(sass@1.98.0)(yaml@2.7.0)
-
   lib:
     dependencies:
       '@m2d/core':
@@ -2040,8 +1985,8 @@ packages:
     resolution: {integrity: sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg==}
     engines: {node: '>= 0.4'}
 
-  caniuse-lite@1.0.30001782:
-    resolution: {integrity: sha512-dZcaJLJeDMh4rELYFw1tvSn1bhZWYFOt468FcbHHxx/Z/dFidd1I6ciyFdi3iwfQCyOjqo9upF6lGQYtMiJWxw==}
+  caniuse-lite@1.0.30001784:
+    resolution: {integrity: sha512-WU346nBTklUV9YfUl60fqRbU5ZqyXlqvo1SgigE1OAXK5bFL8LL9q1K7aap3N739l4BvNqnkm3YrGHiY9sfUQw==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -3675,16 +3620,6 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  r18gs@1.1.3:
-    resolution: {integrity: sha512-pjBuUsF2yx83nrVwiqJJ/xNuYj8vXzWzZHBNKXS1bPz2MQbjE+i71fXDetr7iJVijN7LaoFtq05a6Hbk5FEBOQ==}
-    peerDependencies:
-      '@types/react': 16.8 - 19
-      next: '*'
-      react: 16.8 - 19
-    peerDependenciesMeta:
-      next:
-        optional: true
-
   r18gs@3.0.1:
     resolution: {integrity: sha512-cuH/f+jlfJ5Se6OnQ6FJDF6GrugwBeWDYVSDvK4hL9Prxe7bHTRn0ep7ZOh/QYg1TKx6FFiV8IpeYmmFpQNCgw==}
     peerDependencies:
@@ -3709,27 +3644,11 @@ packages:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  react-mouse-trails@0.0.5:
-    resolution: {integrity: sha512-CJi0Rm5qtxwKll22FsLs2x3sys4Qc53D1whRYWhgDDYnn3fnPCUtg0ikXWcPsD9CFuZt8yrUOqbdzdG1SXWRYg==}
-    peerDependencies:
-      '@types/react': '>=16.8'
-      react: '>=16.8'
-
   react18-loaders@1.1.12:
     resolution: {integrity: sha512-YNtoEI/C85K+BkMiu3s8vczBSYaSpIGpguQxKHltHBXXe62JOkY5olE/vR9Bcw33u2MFKVO1pCk8rsfWqQPBnQ==}
     peerDependencies:
       '@types/react': '>=16.8'
       react: '>=16.8'
-
-  react18-themes@3.2.0:
-    resolution: {integrity: sha512-0Drf0UqSI4CrDc07TQcGzE4fgNMRVjDs531Q4IkH2s3i7lahWdXQGV+MB9p54w7DwNZnoPeCgwC6tslTvaodbg==}
-    peerDependencies:
-      '@types/react': 16.8 - 19
-      next: '*'
-      react: 16.8 - 19
-    peerDependenciesMeta:
-      next:
-        optional: true
 
   react@19.2.4:
     resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
@@ -5861,7 +5780,7 @@ snapshots:
   autoprefixer@10.4.27(postcss@8.5.8):
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001782
+      caniuse-lite: 1.0.30001784
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.8
@@ -5903,7 +5822,7 @@ snapshots:
   browserslist@4.28.2:
     dependencies:
       baseline-browser-mapping: 2.10.13
-      caniuse-lite: 1.0.30001782
+      caniuse-lite: 1.0.30001784
       electron-to-chromium: 1.5.330
       node-releases: 2.0.36
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
@@ -5934,7 +5853,7 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       get-intrinsic: 1.3.0
 
-  caniuse-lite@1.0.30001782: {}
+  caniuse-lite@1.0.30001784: {}
 
   ccount@2.0.1: {}
 
@@ -7612,7 +7531,7 @@ snapshots:
     dependencies:
       '@next/env': 15.5.6
       '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001782
+      caniuse-lite: 1.0.30001784
       postcss: 8.4.31
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -7638,7 +7557,7 @@ snapshots:
       '@next/env': 16.2.2
       '@swc/helpers': 0.5.15
       baseline-browser-mapping: 2.10.13
-      caniuse-lite: 1.0.30001782
+      caniuse-lite: 1.0.30001784
       postcss: 8.4.31
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -7925,11 +7844,6 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  r18gs@1.1.3(@types/react@19.2.14)(react@19.2.4):
-    dependencies:
-      '@types/react': 19.2.14
-      react: 19.2.4
-
   r18gs@3.0.1(@types/react@19.2.14)(react@19.2.4):
     dependencies:
       '@types/react': 19.2.14
@@ -7952,21 +7866,10 @@ snapshots:
       sucrase: 3.35.1
       use-editable: 2.3.3(react@19.2.4)
 
-  react-mouse-trails@0.0.5(@types/react@19.2.14)(react@19.2.4):
-    dependencies:
-      '@types/react': 19.2.14
-      react: 19.2.4
-
   react18-loaders@1.1.12(@types/react@19.2.14)(react@19.2.4):
     dependencies:
       '@types/react': 19.2.14
       r18gs: 3.0.1(@types/react@19.2.14)(react@19.2.4)
-      react: 19.2.4
-
-  react18-themes@3.2.0(@types/react@19.2.14)(react@19.2.4):
-    dependencies:
-      '@types/react': 19.2.14
-      r18gs: 1.1.3(@types/react@19.2.14)(react@19.2.4)
       react: 19.2.4
 
   react@19.2.4: {}
