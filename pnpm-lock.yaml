@@ -3845,8 +3845,8 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  std-env@4.0.0:
-    resolution: {integrity: sha512-zUMPtQ/HBY3/50VbpkupYHbRroTRZJPRLvreamgErJVys0ceuzMkD44J/QjqhHjOzK42GQ3QZIeFG1OYfOtKqQ==}
+  std-env@4.1.0:
+    resolution: {integrity: sha512-Rq7ybcX2RuC55r9oaPVEW7/xu3tj8u4GeBYHBWCychFtzMIr86A7e3PPEBPT37sHStKX3+TiX/Fr/ACmJLVlLQ==}
 
   stop-iteration-iterator@1.1.0:
     resolution: {integrity: sha512-eLoXW/DHyl62zxY4SCaIgnRhuMr6ri4juEYARS8E6sCEqzKpOiE521Ucofdx+KnDZl5xmvGYaaKCk5FEOxJCoQ==}
@@ -5631,7 +5631,7 @@ snapshots:
       istanbul-reports: 3.2.0
       magicast: 0.5.2
       obug: 2.1.1
-      std-env: 4.0.0
+      std-env: 4.1.0
       tinyrainbow: 3.1.0
       vitest: 4.1.4(@types/node@25.6.0)(@vitest/coverage-v8@4.1.4)(happy-dom@17.4.7)(jsdom@29.0.2)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.2)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
 
@@ -8201,7 +8201,7 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  std-env@4.0.0: {}
+  std-env@4.1.0: {}
 
   stop-iteration-iterator@1.1.0:
     dependencies:
@@ -8564,7 +8564,7 @@ snapshots:
       obug: 2.1.1
       pathe: 2.0.3
       picomatch: 4.0.4
-      std-env: 4.0.0
+      std-env: 4.1.0
       tinybench: 2.9.0
       tinyexec: 1.1.1
       tinyglobby: 0.2.16
