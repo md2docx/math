@@ -29,7 +29,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^2.0.0"
   },
   "pnpm": {
     "overrides": {
