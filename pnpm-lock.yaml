@@ -2010,8 +2010,8 @@ packages:
   chardet@2.1.1:
     resolution: {integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==}
 
-  chevrotain-allstar@0.4.2:
-    resolution: {integrity: sha512-J3WoNdejJDlmUR0XXgmJK2GnCYKp2eWHnaG1fGkvnBVQw9Y6piP4Q30ETz47bfvPTeaN/DV0V5jqLDgX4PCygg==}
+  chevrotain-allstar@0.4.3:
+    resolution: {integrity: sha512-2X4mkroolSMKqW+H22pyPMUVDqYZzPhephTmg/NODKb1IGYPHfxfhcW0EjS7wcPJNbze2i4vBWT7zT5FKF2lrQ==}
     peerDependencies:
       chevrotain: ^12.0.0
 
@@ -2321,8 +2321,8 @@ packages:
   dom-accessibility-api@0.5.16:
     resolution: {integrity: sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg==}
 
-  dompurify@3.4.1:
-    resolution: {integrity: sha512-JahakDAIg1gyOm7dlgWSDjV4n7Ip2PKR55NIT6jrMfIgLFgWo81vdr1/QGqWtFNRqXP9UV71oVePtjqS2ebnPw==}
+  dompurify@3.4.2:
+    resolution: {integrity: sha512-lHeS9SA/IKeIFFyYciHBr2n0v1VMPlSj843HdLOwjb2OxNwdq9Xykxqhk+FE42MzAdHvInbAolSE4mhahPpjXA==}
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
@@ -5875,7 +5875,7 @@ snapshots:
 
   chardet@2.1.1: {}
 
-  chevrotain-allstar@0.4.2(chevrotain@12.0.0):
+  chevrotain-allstar@0.4.3(chevrotain@12.0.0):
     dependencies:
       chevrotain: 12.0.0
       lodash-es: 4.18.1
@@ -6209,7 +6209,7 @@ snapshots:
 
   dom-accessibility-api@0.5.16: {}
 
-  dompurify@3.4.1:
+  dompurify@3.4.2:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -6986,7 +6986,7 @@ snapshots:
     dependencies:
       '@chevrotain/regexp-to-ast': 12.0.0
       chevrotain: 12.0.0
-      chevrotain-allstar: 0.4.2(chevrotain@12.0.0)
+      chevrotain-allstar: 0.4.3(chevrotain@12.0.0)
       vscode-languageserver: 9.0.1
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
@@ -7272,7 +7272,7 @@ snapshots:
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.14
       dayjs: 1.11.20
-      dompurify: 3.4.1
+      dompurify: 3.4.2
       katex: 0.16.45
       khroma: 2.1.0
       lodash-es: 4.18.1
