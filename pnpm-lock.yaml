@@ -156,8 +156,8 @@ importers:
         specifier: ^0.0.0
         version: 0.0.0
       jsdom:
-        specifier: ^29.1.0
-        version: 29.1.0
+        specifier: ^29.1.1
+        version: 29.1.1
       remark-parse:
         specifier: ^11.0.0
         version: 11.0.0
@@ -175,7 +175,7 @@ importers:
         version: 6.1.1(typescript@6.0.3)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.0)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
+        version: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.1)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
 
   packages/config-typescript: {}
 
@@ -312,8 +312,8 @@ importers:
         specifier: ^0.0.4
         version: 0.0.4
       jsdom:
-        specifier: ^29.1.0
-        version: 29.1.0
+        specifier: ^29.1.1
+        version: 29.1.1
       react:
         specifier: ^19.2.5
         version: 19.2.5
@@ -331,7 +331,7 @@ importers:
         version: 6.1.1(typescript@6.0.3)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.0)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
+        version: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.1)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
 
   scripts: {}
 
@@ -2010,8 +2010,8 @@ packages:
   chardet@2.1.1:
     resolution: {integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==}
 
-  chevrotain-allstar@0.4.1:
-    resolution: {integrity: sha512-PvVJm3oGqrveUVW2Vt/eZGeiAIsJszYweUcYwcskg9e+IubNYKKD+rHHem7A6XVO22eDAL+inxNIGAzZ/VIWlA==}
+  chevrotain-allstar@0.4.2:
+    resolution: {integrity: sha512-J3WoNdejJDlmUR0XXgmJK2GnCYKp2eWHnaG1fGkvnBVQw9Y6piP4Q30ETz47bfvPTeaN/DV0V5jqLDgX4PCygg==}
     peerDependencies:
       chevrotain: ^12.0.0
 
@@ -2901,8 +2901,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jsdom@29.1.0:
-    resolution: {integrity: sha512-YNUc7fB9QuvSSQWfrH0xF+TyABkxUwx8sswgIDaCrw4Hol8BghdZDkITtZheRJeMtzWlnTfsM3bBBusRvpO1wg==}
+  jsdom@29.1.1:
+    resolution: {integrity: sha512-ECi4Fi2f7BdJtUKTflYRTiaMxIB0O6zfR1fX0GXpUrf6flp8QIYn1UT20YQqdSOfk2dfkCwS8LAFoJDEppNK5Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -5639,7 +5639,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.0)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
+      vitest: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.1)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
 
   '@vitest/expect@4.1.5':
     dependencies:
@@ -5875,7 +5875,7 @@ snapshots:
 
   chardet@2.1.1: {}
 
-  chevrotain-allstar@0.4.1(chevrotain@12.0.0):
+  chevrotain-allstar@0.4.2(chevrotain@12.0.0):
     dependencies:
       chevrotain: 12.0.0
       lodash-es: 4.18.1
@@ -6913,7 +6913,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@29.1.0:
+  jsdom@29.1.1:
     dependencies:
       '@asamuzakjp/css-color': 5.1.11
       '@asamuzakjp/dom-selector': 7.1.1
@@ -6986,7 +6986,7 @@ snapshots:
     dependencies:
       '@chevrotain/regexp-to-ast': 12.0.0
       chevrotain: 12.0.0
-      chevrotain-allstar: 0.4.1(chevrotain@12.0.0)
+      chevrotain-allstar: 0.4.2(chevrotain@12.0.0)
       vscode-languageserver: 9.0.1
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
@@ -8538,7 +8538,7 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  vitest@4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.0)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0)):
+  vitest@4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(happy-dom@17.4.7)(jsdom@29.1.1)(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0)):
     dependencies:
       '@vitest/expect': 4.1.5
       '@vitest/mocker': 4.1.5(vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.10.0)(@types/node@25.6.0)(esbuild@0.27.7)(sass@1.99.0)(yaml@2.7.0))
@@ -8564,7 +8564,7 @@ snapshots:
       '@types/node': 25.6.0
       '@vitest/coverage-v8': 4.1.5(vitest@4.1.5)
       happy-dom: 17.4.7
-      jsdom: 29.1.0
+      jsdom: 29.1.1
     transitivePeerDependencies:
       - msw
 
