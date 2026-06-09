@@ -84,6 +84,8 @@ export const KATEX_FUNCTIONS = new Set<string>(["Pr","arccos","arcctg","arcsin",
 
 /** KaTeX macro-only symbols mapped to Unicode for Word OMML text runs. */
 export const KATEX_SYMBOL_OVERRIDES: Record<string, string> = {
+  "quad": " ",
+  "qquad": "  ",
   "cdotp": "⋅",
   "neq": "≠",
   "notin": "∉",
@@ -104,5 +106,7 @@ export const KATEX_SYMBOL_OVERRIDES: Record<string, string> = {
   "llbracket": "⟦",
   "rrbracket": "⟧",
   "lBrace": "⦃",
-  "rBrace": "⦄"
+  "rBrace": "⦄",
+  "ne": "≠",
+  "cdots": "⋯"
 };

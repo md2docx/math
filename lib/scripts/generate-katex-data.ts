@@ -107,7 +107,7 @@ for (const m of macrosSrc.matchAll(
     overrideMap[m[1]] = resolved;
   }
 }
-for (const m of macrosSrc.matchAll(/defineMacro\("\\\\(q?quad)",\s*"\\hskip(\d+)em/g)) {
+for (const m of macrosSrc.matchAll(/defineMacro\("\\\\(q?quad)",\s*"\\\\hskip(\d+)em/g)) {
   overrideMap[m[1]] = m[1] === "qquad" ? "\u2003\u2003" : "\u2003";
 }
 for (const m of macrosSrc.matchAll(/defineMacro\("(\\u[0-9a-fA-F]{4})",\s*"\\\\([^"]+)"\)/g)) {
@@ -129,6 +129,9 @@ for (const m of macrosSrc.matchAll(/defineMacro\("\\\\([^"]+)",\s*"([^"]+)"\)/g)
     overrideMap[name] = resolved;
   }
 }
+
+if (overrideMap.neq) overrideMap.ne = overrideMap.neq;
+if (symbolMap["@cdots"]) overrideMap.cdots = symbolMap["@cdots"];
 
 const symbolLines = Object.entries(symbolMap)
   .sort(([a], [b]) => a.localeCompare(b))
