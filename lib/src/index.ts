@@ -4,6 +4,8 @@ import { parseMath } from "latex-math";
 import * as DOCX from "docx";
 // skipcq: JS-C1003
 import type * as latex from "@unified-latex/unified-latex-types";
+import { KATEX_ACCENTS, KATEX_ALIASES, KATEX_FUNCTIONS, KATEX_SYMBOL_OVERRIDES } from "./katexMeta";
+import { KATEX_SYMBOLS } from "./katexSymbols";
 
 /**
  * Checks if the argument has curly brackets.
@@ -14,149 +16,8 @@ const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argumen
 /** convert to MathRun */
 const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun => new docx.MathRun(s);
 
-const LATEX_SYMBOLS: Record<string, string> = {
-  textasciitilde: "~",
-  textasciicircum: "^",
-  textbackslash: "∖",
-  textbar: "|",
-  textless: "<",
-  textgreater: ">",
-  neq: "≠",
-  sim: "∼",
-  simeq: "≃",
-  approx: "≈",
-  fallingdotseq: "≒",
-  risingdotseq: "≓",
-  equiv: "≡",
-  geq: "≥",
-  geqq: "≧",
-  leq: "≤",
-  leqq: "≦",
-  gg: "≫",
-  ll: "≪",
-  times: "×",
-  div: "÷",
-  pm: "±",
-  mp: "∓",
-  oplus: "⊕",
-  ominus: "⊖",
-  otimes: "⊗",
-  oslash: "⊘",
-  circ: "∘",
-  cdot: "⋅",
-  bullet: "∙",
-  ltimes: "⋉",
-  rtimes: "⋊",
-  in: "∈",
-  ni: "∋",
-  notin: "∉",
-  subset: "⊂",
-  supset: "⊃",
-  subseteq: "⊆",
-  supseteq: "⊇",
-  nsubseteq: "⊈",
-  nsupseteq: "⊉",
-  subsetneq: "⊊",
-  supsetneq: "⊋",
-  cap: "∩",
-  cup: "∪",
-  emptyset: "∅",
-  infty: "∞",
-  partial: "∂",
-  aleph: "ℵ",
-  hbar: "ℏ",
-  wp: "℘",
-  Re: "ℜ",
-  Im: "ℑ",
-  alpha: "α",
-  beta: "β",
-  gamma: "γ",
-  delta: "δ",
-  epsilon: "ϵ",
-  zeta: "ζ",
-  eta: "η",
-  theta: "θ",
-  iota: "ι",
-  kappa: "κ",
-  lambda: "λ",
-  mu: "μ",
-  nu: "ν",
-  xi: "ξ",
-  pi: "π",
-  rho: "ρ",
-  sigma: "σ",
-  tau: "τ",
-  upsilon: "υ",
-  phi: "ϕ",
-  chi: "χ",
-  psi: "ψ",
-  omega: "ω",
-  varepsilon: "ε",
-  vartheta: "ϑ",
-  varrho: "ϱ",
-  varsigma: "ς",
-  varphi: "φ",
-  Gamma: "Γ",
-  Delta: "Δ",
-  Theta: "Θ",
-  Lambda: "Λ",
-  Xi: "Ξ",
-  Pi: "Π",
-  Sigma: "Σ",
-  Upsilon: "Υ",
-  Phi: "Φ",
-  Psi: "Ψ",
-  Omega: "Ω",
-  int: "∫",
-  oint: "∮",
-  prod: "∏",
-  coprod: "∐",
-  sum: "∑",
-  log: "log",
-  exp: "exp",
-  lim: "lim",
-  inf: "∞",
-  perp: "⊥",
-  and: "∧",
-  or: "∨",
-  not: "¬",
-  to: "→",
-  gets: "⟹",
-  implies: "⟹",
-  impliedby: "⟸",
-  forall: "∀",
-  exists: "∃",
-  empty: "∅",
-  nabla: "∇",
-  top: "⊤",
-  bot: "⊥",
-  angle: "∠",
-  backslash: "∖",
-  neg: "¬",
-  lnot: "¬",
-  flat: "♭",
-  natural: "♮",
-  sharp: "♯",
-  clubsuit: "♣",
-  diamondsuit: "♦",
-  heartsuit: "♥",
-  spadesuit: "♠",
-  varnothing: "∅",
-  S: "∖",
-  P: "∏",
-  bigcap: "⋀",
-  bigcup: "⋁",
-  bigwedge: "⊓",
-  bigvee: "⊔",
-  bigsqcap: "⊓",
-  bigsqcup: "⊔",
-  biguplus: "⊕",
-  bigoplus: "⊕",
-  bigotimes: "⊗",
-  bigodot: "⊙",
-  biginterleave: "⊺",
-  bigtimes: "⨯",
-};
+const resolveLatexSymbol = (name: string): string | undefined =>
+  KATEX_SYMBOL_OVERRIDES[name] ?? KATEX_SYMBOLS[name] ?? KATEX_ALIASES[name];
 
 /** convert group to Math */
 const mapGroup = (docx: typeof DOCX, nodes: latex.Node[]): DOCX.MathRun[] => {
@@ -277,8 +138,9 @@ const mapMacro = (
     }
     case "hat":
     case "widehat":
-      // returnVal = docx.MathAccentCharacter(n)
-      returnVal = docx.createMathAccentCharacter({ accent: "^" });
+      returnVal = docx.createMathAccentCharacter({
+        accent: KATEX_ACCENTS[node.content] ?? "^",
+      });
       break;
     case "sum": {
       const docNode = new docx.MathSum({
@@ -325,7 +187,13 @@ const mapMacro = (
     case "mathbf":
       return mapGroup(docx, node.args?.[0]?.content ?? []);
     default:
-      returnVal = mapString(docx, LATEX_SYMBOLS[node.content] ?? node.content);
+      if (KATEX_ACCENTS[node.content]) {
+        returnVal = docx.createMathAccentCharacter({ accent: KATEX_ACCENTS[node.content] });
+      } else if (KATEX_FUNCTIONS.has(node.content)) {
+        returnVal = mapString(docx, node.content);
+      } else {
+        returnVal = mapString(docx, resolveLatexSymbol(node.content) ?? node.content);
+      }
   }
   // @ts-expect-error -- reading extra field
   if (runs[runs.length - 1]?.isSum && returnVal) {

@@ -29,7 +29,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "generate:katex": "node --experimental-strip-types scripts/generate-katex-data.ts"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
