@@ -16,6 +16,14 @@ const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argumen
 /** convert to MathRun */
 const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun => new docx.MathRun(s);
 
+const PLUGIN_ID = "@chitwitgit/m2d-math";
+
+const logSkippedEmptyMath = (latex: string, scope: "inline" | "block") => {
+  console.error(
+    `[${PLUGIN_ID}] Skipping empty ${scope} math for ${JSON.stringify(latex)}; no renderable OMML was produced. Empty <m:oMath> elements break Microsoft Word.`,
+  );
+};
+
 const resolveLatexSymbol = (name: string): string | undefined =>
   KATEX_SYMBOL_OVERRIDES[name] ?? KATEX_SYMBOLS[name] ?? KATEX_ALIASES[name];
 
@@ -421,14 +429,25 @@ export const mathPlugin: () => IPlugin<{
       if (node.type !== "inlineMath" && node.type !== "math") return [];
       (node as unknown as EmptyNode)._type = node.type;
       node.type = "";
-      return [new docx.Math({ children: parseLatex(docx, node.value ?? "").flat() })];
+      const latex = node.value ?? "";
+      const children = parseLatex(docx, latex).flat();
+      if (!children.length) {
+        logSkippedEmptyMath(latex, "inline");
+        return [];
+      }
+      return [new docx.Math({ children })];
     },
     block: (docx, node) => {
       if (node.type !== "math" && node.type !== "inlineMath") return [];
       node.type = "";
-      return parseLatex(docx, node.value ?? "").map(
-        runs => new docx.Paragraph({ children: [new docx.Math({ children: runs })] }),
-      );
+      const latex = node.value ?? "";
+      return parseLatex(docx, latex).flatMap(runs => {
+        if (!runs.length) {
+          logSkippedEmptyMath(latex, "block");
+          return [];
+        }
+        return [new docx.Paragraph({ children: [new docx.Math({ children: runs })] })];
+      });
     },
   };
 };
