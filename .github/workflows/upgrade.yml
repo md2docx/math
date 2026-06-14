@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           registry-url: https://registry.npmjs.org
-          node-version: 20
+          node-version: 24
       - name: Setup Git
         run: |
           git config --global user.name "mayank1513"
