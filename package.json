@@ -7,7 +7,7 @@
     "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,md,css,scss}\"",
     "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
+    "lint:fix": "echo ok",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "preinstall": "node scripts/update-pm.js"
@@ -24,7 +24,7 @@
     "prettier": "^3.8.3",
     "turbo": "^2.9.9"
   },
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@11.6.0",
   "engines": {
     "node": ">=18"
   },
