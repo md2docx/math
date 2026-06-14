@@ -18,7 +18,7 @@ export default function RootLayout({
 }): ReactNode {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Core />
         <Layout>
           <Header linkComponent={CustomLink} />
