@@ -1,4 +1,4 @@
-/** KaTeX v0.16.22 `defineSymbol` entries — regenerate via `pnpm generate:katex`. */
+/** KaTeX v0.16.22 — regenerate via `pnpm generate:katex` (fetches from https://raw.githubusercontent.com/KaTeX/KaTeX/v0.16.22/src). */
 export const KATEX_SYMBOLS: Record<string, string> = {
   " ": " ",
   "_": "_",

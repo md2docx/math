@@ -1,4 +1,4 @@
-/** KaTeX v0.16.22 derived metadata — regenerate via `pnpm generate:katex`. */
+/** KaTeX v0.16.22 — regenerate via `pnpm generate:katex` (fetches from https://raw.githubusercontent.com/KaTeX/KaTeX/v0.16.22/src). */
 export const KATEX_ALIASES: Record<string, string> = {
   "bgroup": "{",
   "egroup": "}",
