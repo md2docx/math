@@ -1,22 +1,27 @@
 "use client";
 
-import { unified } from "unified";
-import md from "../../../../../sample.md?raw";
-import remarkParse from "remark-parse";
-import remarkGfm from "remark-gfm";
-import remarkFrontmatter from "remark-frontmatter";
-import remarkMath from "remark-math";
-import styles from "./demo.module.scss";
-import { CodeDisplay } from "./code-display";
-import { removePosition } from "unist-util-remove-position";
-// skipcq: JS-R1001
-import demoCode from "./demo.tsx?raw";
-import { useState } from "react";
-// import { remarkDocx } from "@m2d/remark-docx";
-import { toDocx } from "mdast2docx";
 import { emojiPlugin } from "@m2d/emoji";
 import { mathPlugin } from "@m2d/math";
-import { tablePlugin, listPlugin, imagePlugin, htmlPlugin } from "mdast2docx/dist/plugins";
+// import { remarkDocx } from "@m2d/remark-docx";
+import { toDocx } from "mdast2docx";
+import {
+  htmlPlugin,
+  imagePlugin,
+  listPlugin,
+  tablePlugin,
+} from "mdast2docx/dist/plugins";
+import { useState } from "react";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import remarkParse from "remark-parse";
+import { unified } from "unified";
+import { removePosition } from "unist-util-remove-position";
+import md from "../../../../../sample.md?raw";
+import { CodeDisplay } from "./code-display";
+import styles from "./demo.module.scss";
+// skipcq: JS-R1001
+import demoCode from "./demo.tsx?raw";
 
 /** React live demo */
 export function Demo() {
@@ -54,7 +59,7 @@ export function Demo() {
           imagePlugin(),
         ],
       },
-    ).then(blob => {
+    ).then((blob) => {
       const url = URL.createObjectURL(blob as Blob);
       const link = document.createElement("a");
       link.href = url;
@@ -75,7 +80,12 @@ export function Demo() {
   return (
     <div className={styles.demo}>
       <h1>MDAST (Markdown Abstract Syntax Tree) to DOCX</h1>
-      <button className={styles.btn} disabled={loading} onClick={downloadDocx}>
+      <button
+        className={styles.btn}
+        disabled={loading}
+        onClick={downloadDocx}
+        type="button"
+      >
         {loading ? "Downloading..." : "Download as DOCX"}
       </button>
       <CodeDisplay code={code} />

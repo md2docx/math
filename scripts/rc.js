@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const __dir = path.resolve(__dirname, "..");
 const TEMPLATE_DIR = "scripts/templates/";
@@ -18,8 +18,18 @@ const TEMPLATE_DIR = "scripts/templates/";
  * @param {string[]} currentDirSegments - Current directory segments.
  * @param {boolean} isClient - Indicates whether it's a client component.
  */
-function updateIndexFilesIfNeeded(nestedRouteActions, rootSegments, currentDirSegments, isClient) {
-  const indexFilePath = path.resolve(__dir, ...rootSegments, ...currentDirSegments, "index.ts");
+function updateIndexFilesIfNeeded(
+  nestedRouteActions,
+  rootSegments,
+  currentDirSegments,
+  isClient,
+) {
+  const indexFilePath = path.resolve(
+    __dir,
+    ...rootSegments,
+    ...currentDirSegments,
+    "index.ts",
+  );
   const root = rootSegments.join("/");
   if (!fs.existsSync(indexFilePath)) {
     const content =
@@ -35,7 +45,10 @@ function updateIndexFilesIfNeeded(nestedRouteActions, rootSegments, currentDirSe
       type: "append",
       pattern: /(?<insertion> component exports)/,
       path: `${
-        root + (length === 1 ? "" : `${currentDirSegments.slice(0, length - 1).join("/")}/`)
+        root +
+        (length === 1
+          ? ""
+          : `${currentDirSegments.slice(0, length - 1).join("/")}/`)
       }index.ts`,
       template: `export * from "./${currentDirSegments[length - 1]}"`,
     });
@@ -63,7 +76,9 @@ function createRootIndexAndDeclarations(data) {
   const nestedRouteActions = [];
   const { isClient } = data;
   const srcDir = path.resolve(__dir, `${data.pkgPath}/src`);
-  const [banner, target] = isClient ? ['"use client";\n\n', "client"] : ["", "server"];
+  const [banner, target] = isClient
+    ? ['"use client";\n\n', "client"]
+    : ["", "server"];
   const root = `${data.pkgPath}/src/${target}/`;
 
   /** Create index.ts in src directory if not present.  */
@@ -79,7 +94,8 @@ function createRootIndexAndDeclarations(data) {
     nestedRouteActions.push({
       type: "add",
       path: `${data.pkgPath}/src/declaration.d.ts`,
-      template: 'declare module "*.module.css";\ndeclare module "*.module.scss";\n',
+      template:
+        'declare module "*.module.css";\ndeclare module "*.module.scss";\n',
     });
 
   /** Create index.ts in src/client or src/server directory if not present.  */
@@ -100,7 +116,8 @@ function createRootIndexAndDeclarations(data) {
  */
 function getNestedRouteActions(data) {
   const name = data.name.replace(/\/+/g, "/").replace(/\/$/, "").trim();
-  const { nestedRouteActions, root, isClient } = createRootIndexAndDeclarations(data);
+  const { nestedRouteActions, root, isClient } =
+    createRootIndexAndDeclarations(data);
 
   if (!name.includes("/")) return { nestedRouteActions, parentDir: root };
 
@@ -111,7 +128,12 @@ function getNestedRouteActions(data) {
   const rootSegments = [...root.split(/\/|\\/)];
 
   for (let i = 1; i <= directories.length; i++)
-    updateIndexFilesIfNeeded(nestedRouteActions, rootSegments, directories.slice(0, i), isClient);
+    updateIndexFilesIfNeeded(
+      nestedRouteActions,
+      rootSegments,
+      directories.slice(0, i),
+      isClient,
+    );
 
   return { nestedRouteActions, parentDir: `${root + directories.join("/")}/` };
 }
@@ -123,7 +145,12 @@ function getNestedRouteActions(data) {
  * @returns {Object} Index action.
  */
 function getIndexAction(data, parentDir) {
-  const indFilePath = path.resolve(__dir, parentDir, toKebabCase(data.name), "index.ts");
+  const indFilePath = path.resolve(
+    __dir,
+    parentDir,
+    toKebabCase(data.name),
+    "index.ts",
+  );
   if (fs.existsSync(indFilePath))
     return {
       type: "append",
@@ -191,13 +218,15 @@ module.exports = {
     {
       type: "confirm",
       name: "isClient",
-      message: 'Is this a client component? (Should we add "use client" directive?)',
+      message:
+        'Is this a client component? (Should we add "use client" directive?)',
     },
     {
       type: "input",
       name: "description",
-      message: "Describe your component. (This will be added as js-doc comment.)",
+      message:
+        "Describe your component. (This will be added as js-doc comment.)",
     },
   ],
-  actions: data => (data ? getActions(data) : []),
+  actions: (data) => (data ? getActions(data) : []),
 };

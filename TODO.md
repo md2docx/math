@@ -6,7 +6,6 @@
   - Click `Create repository` and wait for the setup workflow to finish rebranding your repo.
 - [ ] Install and set up Node.js and your IDE (VSCode recommended)
 - [ ] Install the recommended VSCode extensions:
-  - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
   - [Trello Kanban](https://marketplace.visualstudio.com/items?itemName=mayank1513.trello-kanban-task-board)
 - [ ] Install `pnpm` using `npm i -g pnpm`
 - [ ] Install dependencies using `pnpm`

@@ -1,18 +1,21 @@
-import { EmptyNode, IPlugin } from "@m2d/core";
-import { parseMath } from "latex-math";
-// skipcq: JS-C1003
-import * as DOCX from "docx";
+import type { EmptyNode, IPlugin } from "@m2d/core";
 // skipcq: JS-C1003
 import type * as latex from "@unified-latex/unified-latex-types";
+// skipcq: JS-C1003
+import type * as DOCX from "docx";
+import { parseMath } from "latex-math";
 
 /**
  * Checks if the argument has curly brackets.
  */
-const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argument =>
+const hasCurlyBrackets = (
+  arg: latex.Argument | undefined,
+): arg is latex.Argument =>
   Boolean(arg && arg.openMark === "{" && arg.closeMark === "}");
 
 /** convert to MathRun */
-const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun => new docx.MathRun(s);
+const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun =>
+  new docx.MathRun(s);
 
 const LATEX_SYMBOLS: Record<string, string> = {
   textasciitilde: "~",
@@ -292,7 +295,11 @@ const mapMacro = (
     case "tfrac":
     case "dfrac": {
       const args = node.args ?? [];
-      if (args.length === 2 && hasCurlyBrackets(args[0]) && hasCurlyBrackets(args[1])) {
+      if (
+        args.length === 2 &&
+        hasCurlyBrackets(args[0]) &&
+        hasCurlyBrackets(args[1])
+      ) {
         returnVal = new docx.MathFraction({
           numerator: mapGroup(docx, args[0].content),
           denominator: mapGroup(docx, args[1].content),
@@ -394,7 +401,10 @@ const mapNode = (
 };
 
 /** Parse latex and convert to DOCX MathRun nodes */
-export const parseLatex = (docx: typeof DOCX, value: string): DOCX.MathRun[][] => {
+export const parseLatex = (
+  docx: typeof DOCX,
+  value: string,
+): DOCX.MathRun[][] => {
   const latexNodes = parseMath(value);
 
   const paragraphs: DOCX.MathRun[][] = [[]];
@@ -404,7 +414,8 @@ export const parseLatex = (docx: typeof DOCX, value: string): DOCX.MathRun[][] =
     const res = mapNode(docx, node, runs);
     if (!res) {
       // line break
-      paragraphs.push((runs = []));
+      runs = [];
+      paragraphs.push(runs);
     } else {
       runs.push(...res);
     }
@@ -424,13 +435,16 @@ export const mathPlugin: () => IPlugin<{
       if (node.type !== "inlineMath" && node.type !== "math") return [];
       (node as unknown as EmptyNode)._type = node.type;
       node.type = "";
-      return [new docx.Math({ children: parseLatex(docx, node.value ?? "").flat() })];
+      return [
+        new docx.Math({ children: parseLatex(docx, node.value ?? "").flat() }),
+      ];
     },
     block: (docx, node) => {
       if (node.type !== "math" && node.type !== "inlineMath") return [];
       node.type = "";
       return parseLatex(docx, node.value ?? "").map(
-        runs => new docx.Paragraph({ children: [new docx.Math({ children: runs })] }),
+        (runs) =>
+          new docx.Paragraph({ children: [new docx.Math({ children: runs })] }),
       );
     },
   };

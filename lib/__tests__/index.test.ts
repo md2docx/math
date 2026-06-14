@@ -1,9 +1,9 @@
-import { describe, it } from "vitest";
+import fs from "node:fs";
 import { toDocx } from "@m2d/core"; // Adjust path based on your setup
-import { unified } from "unified";
-import remarkParse from "remark-parse";
 import remarkMath from "remark-math";
-import fs from "fs";
+import remarkParse from "remark-parse";
+import { unified } from "unified";
+import { describe, it } from "vitest";
 import { mathPlugin } from "../src";
 
 const markdown = fs.readFileSync("../sample.md", "utf-8");

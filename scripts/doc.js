@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const featured = require("./featured.json");
 featured.sort((f1, f2) => f1.title.localeCompare(f2.title));
@@ -11,10 +11,13 @@ const readMeLines = [
   "",
 ];
 
-featured.forEach(f => {
+featured.forEach((f) => {
   readMeLines.push(`- [${f.title}](${f.href}) - ${f.description}`);
 });
 
 readMeLines.push("");
 
-fs.writeFileSync(path.resolve(__dirname, "..", "FEATURED.md"), readMeLines.join("\n"));
+fs.writeFileSync(
+  path.resolve(__dirname, "..", "FEATURED.md"),
+  readMeLines.join("\n"),
+);
