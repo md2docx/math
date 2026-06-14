@@ -4,13 +4,7 @@ import type * as latex from "@unified-latex/unified-latex-types";
 // skipcq: JS-C1003
 import type * as DOCX from "docx";
 import { parseMath } from "latex-math";
-import {
-  KATEX_ACCENTS,
-  KATEX_ALIASES,
-  KATEX_FUNCTIONS,
-  KATEX_SYMBOL_OVERRIDES,
-} from "./katexMeta";
-import { KATEX_SYMBOLS } from "./katexSymbols";
+import { KATEX_ACCENTS, KATEX_FUNCTIONS, KATEX_SYMBOLS } from "./katexData";
 
 /**
  * Checks if the argument has curly brackets.
@@ -35,7 +29,7 @@ const logSkippedEmptyMath = (latex: string, scope: "inline" | "block") => {
 
 /** Resolve a LaTeX command name to its Unicode symbol. */
 const resolveLatexSymbol = (name: string): string | undefined =>
-  KATEX_SYMBOL_OVERRIDES[name] ?? KATEX_SYMBOLS[name] ?? KATEX_ALIASES[name];
+  KATEX_SYMBOLS[name];
 
 type NAryOptions = {
   accent: string;
