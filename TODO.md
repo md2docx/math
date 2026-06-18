@@ -6,7 +6,6 @@
   - Click `Create repository` and wait for the setup workflow to finish rebranding your repo.
 - [ ] Install and set up Node.js and your IDE (VSCode recommended)
 - [ ] Install the recommended VSCode extensions:
-  - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
   - [Trello Kanban](https://marketplace.visualstudio.com/items?itemName=mayank1513.trello-kanban-task-board)
 - [ ] Install `pnpm` using `npm i -g pnpm`
 - [ ] Install dependencies using `pnpm`
@@ -15,10 +14,10 @@
 - [ ] 🌟 Enable [private vulnerability reporting](https://github.com/md2docx/math/security)
 - [ ] Set up `CodeCov`
   - Visit Codecov and set up your repo
-  - Create [repository secret]((https://github.com/md2docx/math/settings/secrets/actions)) for `CODECOV_TOKEN`
+  - Create [repository secret](<(https://github.com/md2docx/math/settings/secrets/actions)>) for `CODECOV_TOKEN`
 - [ ] Set up `CodeClimate`
   - Visit CodeClimate and set up your repo
-  - Create [repository secret]((https://github.com/md2docx/math/settings/secrets/actions)) for `CC_TEST_REPORTER_ID`
+  - Create [repository secret](<(https://github.com/md2docx/math/settings/secrets/actions)>) for `CC_TEST_REPORTER_ID`
   - Add `*.test.*` to ignore patterns on the website
   - Update Code Climate badge
 - [ ] Add `NPM_AUTH_TOKEN` to repository secrets to automate package publishing

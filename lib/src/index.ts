@@ -1,29 +1,39 @@
-import { EmptyNode, IPlugin } from "@m2d/core";
-import { parseMath } from "latex-math";
-// skipcq: JS-C1003
-import * as DOCX from "docx";
+import type { EmptyNode, IPlugin } from "@m2d/core";
 // skipcq: JS-C1003
 import type * as latex from "@unified-latex/unified-latex-types";
-import { KATEX_ACCENTS, KATEX_ALIASES, KATEX_FUNCTIONS, KATEX_SYMBOL_OVERRIDES } from "./katexMeta";
+// skipcq: JS-C1003
+import type * as DOCX from "docx";
+import { parseMath } from "latex-math";
+import {
+  KATEX_ACCENTS,
+  KATEX_ALIASES,
+  KATEX_FUNCTIONS,
+  KATEX_SYMBOL_OVERRIDES,
+} from "./katexMeta";
 import { KATEX_SYMBOLS } from "./katexSymbols";
 
 /**
  * Checks if the argument has curly brackets.
  */
-const hasCurlyBrackets = (arg: latex.Argument | undefined): arg is latex.Argument =>
+const hasCurlyBrackets = (
+  arg: latex.Argument | undefined,
+): arg is latex.Argument =>
   Boolean(arg && arg.openMark === "{" && arg.closeMark === "}");
 
 /** convert to MathRun */
-const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun => new docx.MathRun(s);
+const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun =>
+  new docx.MathRun(s);
 
-const PLUGIN_ID = "@chitwitgit/m2d-math";
+const PLUGIN_ID = "@m2d/math";
 
+/** Log and skip inline/block math that would emit empty OMML. */
 const logSkippedEmptyMath = (latex: string, scope: "inline" | "block") => {
   console.error(
     `[${PLUGIN_ID}] Skipping empty ${scope} math for ${JSON.stringify(latex)}; no renderable OMML was produced. Empty <m:oMath> elements break Microsoft Word.`,
   );
 };
 
+/** Resolve a LaTeX command name to its Unicode symbol. */
 const resolveLatexSymbol = (name: string): string | undefined =>
   KATEX_SYMBOL_OVERRIDES[name] ?? KATEX_SYMBOLS[name] ?? KATEX_ALIASES[name];
 
@@ -43,7 +53,10 @@ type PendingNAry = DOCX.MathRun & {
   sup?: DOCX.MathRun[];
 };
 
-const NARY_OPERATORS: Record<string, { accent: string; limitLocationVal?: string }> = {
+const NARY_OPERATORS: Record<
+  string,
+  { accent: string; limitLocationVal?: string }
+> = {
   sum: { accent: "∑" },
   prod: { accent: "∏" },
   int: { accent: "∫", limitLocationVal: "subSup" },
@@ -58,26 +71,33 @@ const NARY_OPERATORS: Record<string, { accent: string; limitLocationVal?: string
   bigotimes: { accent: "⊗" },
 };
 
+/** Whether a MathRun is a pending n-ary operator awaiting limits or body. */
 const isPendingNAry = (node: DOCX.MathRun | undefined): node is PendingNAry =>
   Boolean(node && (node as PendingNAry).isNAry);
 
+/** Build an OMML n-ary operator element. */
 const buildNAry = (docx: typeof DOCX, options: NAryOptions): DOCX.MathRun => {
+  /** OMML wrapper for n-ary operators such as sum and integral. */
   class MathNAry extends docx.XmlComponent {
     constructor() {
       super("m:nary");
       this.root.push(
         docx.createMathNAryProperties({
           accent: options.accent,
-          hasSuperScript: !!options.superScript,
-          hasSubScript: !!options.subScript,
+          hasSuperScript: Boolean(options.superScript),
+          hasSubScript: Boolean(options.subScript),
           limitLocationVal: options.limitLocationVal,
         }),
       );
       if (options.subScript) {
-        this.root.push(docx.createMathSubScriptElement({ children: options.subScript }));
+        this.root.push(
+          docx.createMathSubScriptElement({ children: options.subScript }),
+        );
       }
       if (options.superScript) {
-        this.root.push(docx.createMathSuperScriptElement({ children: options.superScript }));
+        this.root.push(
+          docx.createMathSuperScriptElement({ children: options.superScript }),
+        );
       }
       this.root.push(docx.createMathBase({ children: options.children ?? [] }));
     }
@@ -85,18 +105,24 @@ const buildNAry = (docx: typeof DOCX, options: NAryOptions): DOCX.MathRun => {
   return new MathNAry() as unknown as DOCX.MathRun;
 };
 
+/** Create an n-ary operator placeholder that accepts limits and a body later. */
 const createPendingNAry = (
   docx: typeof DOCX,
   accent: string,
   limitLocationVal?: string,
 ): PendingNAry => {
-  const node = buildNAry(docx, { accent, limitLocationVal, children: [] }) as PendingNAry;
+  const node = buildNAry(docx, {
+    accent,
+    limitLocationVal,
+    children: [],
+  }) as PendingNAry;
   node.isNAry = 1;
   node.naryAccent = accent;
   node.naryLimitLoc = limitLocationVal;
   return node;
 };
 
+/** Attach sub/superscript limits to a pending n-ary operator. */
 const attachNAryLimits = (
   docx: typeof DOCX,
   prev: PendingNAry,
@@ -252,7 +278,11 @@ const mapMacro = (
     case "tfrac":
     case "dfrac": {
       const args = node.args ?? [];
-      if (args.length === 2 && hasCurlyBrackets(args[0]) && hasCurlyBrackets(args[1])) {
+      if (
+        args.length === 2 &&
+        hasCurlyBrackets(args[0]) &&
+        hasCurlyBrackets(args[1])
+      ) {
         returnVal = new docx.MathFraction({
           numerator: mapGroup(docx, args[0].content),
           denominator: mapGroup(docx, args[1].content),
@@ -262,7 +292,11 @@ const mapMacro = (
     }
     case "stackrel": {
       const args = node.args ?? [];
-      if (args.length === 2 && hasCurlyBrackets(args[0]) && hasCurlyBrackets(args[1])) {
+      if (
+        args.length === 2 &&
+        hasCurlyBrackets(args[0]) &&
+        hasCurlyBrackets(args[1])
+      ) {
         returnVal = [
           docx.createMathLimitLocation({ value: "undOvr" }),
           new docx.MathLimitUpper({
@@ -321,16 +355,27 @@ const mapMacro = (
           returnVal = mapGroup(docx, args[0].content);
         }
       } else if (KATEX_ACCENTS[node.content]) {
-        returnVal = docx.createMathAccentCharacter({ accent: KATEX_ACCENTS[node.content] });
+        returnVal = docx.createMathAccentCharacter({
+          accent: KATEX_ACCENTS[node.content],
+        });
       } else if (KATEX_FUNCTIONS.has(node.content)) {
         returnVal = mapString(docx, node.content);
       } else {
-        returnVal = mapString(docx, resolveLatexSymbol(node.content) ?? node.content);
+        returnVal = mapString(
+          docx,
+          resolveLatexSymbol(node.content) ?? node.content,
+        );
       }
   }
   if (isPendingNAry(runs[runs.length - 1]) && returnVal) {
     const prev = runs.pop() as PendingNAry;
-    return [finalizeNAry(docx, prev, Array.isArray(returnVal) ? returnVal : [returnVal])];
+    return [
+      finalizeNAry(
+        docx,
+        prev,
+        Array.isArray(returnVal) ? returnVal : [returnVal],
+      ),
+    ];
   }
   return returnVal;
 };
@@ -399,17 +444,24 @@ const mapNode = (
 };
 
 /** Parse latex and convert to DOCX MathRun nodes */
-export const parseLatex = (docx: typeof DOCX, value: string): DOCX.MathRun[][] => {
+export const parseLatex = (
+  docx: typeof DOCX,
+  value: string,
+): DOCX.MathRun[][] => {
   const latexNodes = parseMath(value);
 
   const paragraphs: DOCX.MathRun[][] = [[]];
-  let runs: DOCX.MathRun[] & { binomPending?: 0 | 1; binomFirst?: DOCX.MathRun[] } = paragraphs[0];
+  let runs: DOCX.MathRun[] & {
+    binomPending?: 0 | 1;
+    binomFirst?: DOCX.MathRun[];
+  } = paragraphs[0];
 
   for (const node of latexNodes) {
     const res = mapNode(docx, node, runs);
     if (!res) {
       // line break
-      paragraphs.push((runs = []));
+      runs = [];
+      paragraphs.push(runs);
     } else {
       runs.push(...res);
     }
@@ -441,12 +493,14 @@ export const mathPlugin: () => IPlugin<{
       if (node.type !== "math" && node.type !== "inlineMath") return [];
       node.type = "";
       const latex = node.value ?? "";
-      return parseLatex(docx, latex).flatMap(runs => {
+      return parseLatex(docx, latex).flatMap((runs) => {
         if (!runs.length) {
           logSkippedEmptyMath(latex, "block");
           return [];
         }
-        return [new docx.Paragraph({ children: [new docx.Math({ children: runs })] })];
+        return [
+          new docx.Paragraph({ children: [new docx.Math({ children: runs })] }),
+        ];
       });
     },
   };

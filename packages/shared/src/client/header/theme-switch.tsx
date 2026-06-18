@@ -8,7 +8,7 @@ import styles from "./header.module.scss";
 export default function ThemeSwitch() {
   const { mode } = useMode();
   return (
-    <Switch className={styles.themeswitch}>
+    <Switch className={styles.themeswitch} suppressHydrationWarning>
       <span className="mb" suppressHydrationWarning>
         {mode}
       </span>

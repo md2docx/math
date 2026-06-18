@@ -7,14 +7,15 @@
 /** Let the following error be thrown by npm. There are situations where publish could have failed for different reasons. */
 // throws an exception if process.env.oldv === process.env.v The library version is not up to date, error(" Not able to release to the same version.
 
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+const { execSync } = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const BRANCH = process.env.BRANCH;
 const DEFAULT_BRANCH = process.env.DEFAULT_BRANCH;
 
-const isLatestRelease = BRANCH === DEFAULT_BRANCH || BRANCH.includes("release-");
+const isLatestRelease =
+  BRANCH === DEFAULT_BRANCH || BRANCH.includes("release-");
 let tag = "";
 
 const { version: OLD_VERSION, name } = require("../lib/package.json");
@@ -55,16 +56,23 @@ if (isNotPatch && BRANCH === DEFAULT_BRANCH) {
   } catch (e) {
     console.log({ e });
   }
-  require("./update-security-md")(`${newMajor}.${newMinor}`, `${oldMajor}.${oldMinor}`);
+  require("./update-security-md")(
+    `${newMajor}.${newMinor}`,
+    `${oldMajor}.${oldMinor}`,
+  );
   /** Create new release branch for every Major or Minor release */
   const releaseBranch = `release-${newMajor}.${newMinor}`;
-  execSync(`git checkout -b ${releaseBranch} && git push origin ${releaseBranch}`);
+  execSync(
+    `git checkout -b ${releaseBranch} && git push origin ${releaseBranch}`,
+  );
 } else if (isLatestRelease) {
   /** New version must be valid SEMVER version. No pre-release (beta/alpha etc.) */
   if (!/^\d+\.\d+.\d+$/.test(NEW_VERSION)) throw new Error("Invalid version");
 
   if (isNotPatch)
-    throw new Error("Major or Minor changes can be published only from the default branch.");
+    throw new Error(
+      "Major or Minor changes can be published only from the default branch.",
+    );
 
   // Push changes back to the repo
   try {
@@ -80,13 +88,16 @@ if (isNotPatch && BRANCH === DEFAULT_BRANCH) {
   }
 }
 
-const { visibility } = JSON.parse(execSync("gh repo view --json visibility").toString());
+const { visibility } = JSON.parse(
+  execSync("gh repo view --json visibility").toString(),
+);
 const provenance = visibility.toLowerCase() === "public" ? "--provenance" : "";
 
 let LATEST_VERSION = "0.0.-1";
 
 try {
-  LATEST_VERSION = execSync(`npm view ${name} version`).toString().trim() ?? "0.0.-1";
+  LATEST_VERSION =
+    execSync(`npm view ${name} version`).toString().trim() ?? "0.0.-1";
 } catch {
   // empty
 }
@@ -100,11 +111,17 @@ if (latest[0] < current[0]) {
   isLatest = true;
 } else if (latest[0] === current[0] && latest[1] < current[1]) {
   isLatest = true;
-} else if (latest[0] === current[0] && latest[1] === current[1] && latest[2] < current[2]) {
+} else if (
+  latest[0] === current[0] &&
+  latest[1] === current[1] &&
+  latest[2] < current[2]
+) {
   isLatest = true;
 }
 
-const reTag = isLatest ? "" : ` && npm dist-tag add ${name}@${LATEST_VERSION} latest`;
+const reTag = isLatest
+  ? ""
+  : ` && npm dist-tag add ${name}@${LATEST_VERSION} latest`;
 /** Create release */
 const publishCmd = `cd lib && pnpm build && npm publish ${provenance} --access public${tag && ` --tag ${tag}`}`;
 execSync(publishCmd + reTag);

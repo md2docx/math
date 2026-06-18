@@ -1,5 +1,5 @@
 /** It is assumed that this is called only from the default branch. */
-const { execSync } = require("child_process");
+const { execSync } = require("node:child_process");
 
 const BRANCH = process.env.BRANCH;
 
@@ -22,7 +22,8 @@ const { version: VERSION, name } = require("../lib/package.json");
 let LATEST_VERSION = "0.0.-1";
 
 try {
-  LATEST_VERSION = execSync(`npm view ${name} version`).toString().trim() ?? "0.0.-1";
+  LATEST_VERSION =
+    execSync(`npm view ${name} version`).toString().trim() ?? "0.0.-1";
 } catch {
   // empty
 }
@@ -43,12 +44,19 @@ if (isPatch) {
     );
   } catch {}
 } else {
-  require("./update-security-md")(`${newMajor}.${newMinor}`, `${oldMajor}.${oldMinor}`);
+  require("./update-security-md")(
+    `${newMajor}.${newMinor}`,
+    `${oldMajor}.${oldMinor}`,
+  );
   /** Create new release branch for every Major or Minor release */
-  execSync(`git checkout -b ${releaseBranch} && git push origin ${releaseBranch}`);
+  execSync(
+    `git checkout -b ${releaseBranch} && git push origin ${releaseBranch}`,
+  );
 }
 
-const { visibility } = JSON.parse(execSync("gh repo view --json visibility").toString());
+const { visibility } = JSON.parse(
+  execSync("gh repo view --json visibility").toString(),
+);
 const provenance = visibility.toLowerCase() === "public" ? "--provenance" : "";
 
 try {
@@ -64,7 +72,9 @@ try {
     `gh release create ${VERSION} --generate-notes --latest -n "$(sed '1,/^## /d;/^## /,$d' CHANGELOG.md)" --title "Release v${VERSION}"`,
   );
 } catch {
-  execSync(`gh release create ${VERSION} --generate-notes --latest --title "Release v${VERSION}"`);
+  execSync(
+    `gh release create ${VERSION} --generate-notes --latest --title "Release v${VERSION}"`,
+  );
 }
 
 try {

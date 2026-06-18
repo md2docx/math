@@ -3,3 +3,8 @@ packages:
   - "packages/*"
   - "lib"
   - "scripts"
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  pre-commit: true
+  sharp: true

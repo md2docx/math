@@ -5,30 +5,29 @@
     "build": "turbo build",
     "clean": "turbo clean",
     "dev": "turbo dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md,css,scss}\"",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
+    "format": "biome check . --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "preinstall": "node scripts/update-pm.js"
   },
   "pre-commit": [
-    "lint:fix",
     "format"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
-    "@promptshield/cli": "^1.0.0",
+    "@promptshield/cli": "^1.2.0",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^25.6.0",
-    "prettier": "^3.8.3",
-    "turbo": "^2.9.9"
+    "@types/node": "^25.9.3",
+    "turbo": "^2.9.18"
   },
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@11.7.0",
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
+    "@biomejs/biome": "^2.5.0",
     "pre-commit": "^2.0.0"
   },
   "pnpm": {
