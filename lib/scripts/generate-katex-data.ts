@@ -32,8 +32,37 @@ const fetchKatexSource = async (path: string): Promise<string> => {
 const symbolMap: Record<string, string> = {};
 const aliasMap: Record<string, string> = {};
 const accentMap: Record<string, string> = {};
-const fnSet = new Set<string>();
 const overrideMap: Record<string, string> = {};
+
+type KatexNAryOp = { accent: string; limitLocationVal?: "subSup" };
+
+/** Commands excluded from generated operator tables (with reason). */
+const EXCLUDED_OPS: Record<string, string> = {
+  mathop: "takes a body argument, not a standalone operator name",
+};
+
+/** Parse a defineFunction block from op.js for limits/symbol flags and names. */
+const parseOpBlock = (
+  block: string,
+): { limits: boolean; symbol: boolean; names: string[] } | undefined => {
+  if (!block.includes('type: "op"')) return undefined;
+  const limitsMatch = block.match(/limits:\s*(true|false)/);
+  const symbolMatch = block.match(/symbol:\s*(true|false)/);
+  if (!limitsMatch || !symbolMatch) return undefined;
+
+  const namesMatch = block.match(/names:\s*\[([\s\S]*?)\]/);
+  const names: string[] = [];
+  if (namesMatch) {
+    for (const nameMatch of namesMatch[1].matchAll(/"\\\\([^"]+)"/g)) {
+      names.push(nameMatch[1]);
+    }
+  }
+  return {
+    limits: limitsMatch[1] === "true",
+    symbol: symbolMatch[1] === "true",
+    names,
+  };
+};
 
 /** Decode a KaTeX char literal or single-character string. */
 const decodeChar = (raw: string): string | undefined => {
@@ -117,27 +146,6 @@ const generate = async (): Promise<void> => {
     accentMap[cmd] = chr;
   }
 
-  let blockIdx = 0;
-  let nextBlockIdx = opSrc.indexOf("defineFunction({", blockIdx);
-  while (nextBlockIdx !== -1) {
-    blockIdx = nextBlockIdx;
-    const blockEnd = opSrc.indexOf("});", blockIdx);
-    const block = opSrc.slice(blockIdx, blockEnd);
-    if (block.includes("symbol: false") && !block.includes("symbol: true")) {
-      const namesMatch = block.match(/names:\s*\[([\s\S]*?)\]/);
-      if (namesMatch) {
-        for (const nameMatch of namesMatch[1].matchAll(/"\\+([^"]+)"/g)) {
-          fnSet.add(nameMatch[1]);
-        }
-      }
-    }
-    blockIdx = blockEnd;
-    nextBlockIdx = opSrc.indexOf("defineFunction({", blockIdx);
-  }
-  for (const m of macrosSrc.matchAll(/defineMacro\("\\\\(liminf|limsup)",/g)) {
-    fnSet.add(m[1]);
-  }
-
   for (const m of macrosSrc.matchAll(
     /defineMacro\("\\\\([^"]+)",\s*"\\html@mathml\{[^}]+\}\{[^}]*\\char[`'"]((?:\\u[0-9a-fA-F]{4}|[^`'"]+))/g,
   )) {
@@ -184,6 +192,67 @@ const generate = async (): Promise<void> => {
     ...overrideMap,
   };
 
+  const fnSet = new Set<string>();
+  const limitsTextSet = new Set<string>();
+  const naryOps: Record<string, KatexNAryOp> = {};
+  const integralOps: Record<string, KatexNAryOp> = {};
+  const excluded: Record<string, string> = { ...EXCLUDED_OPS };
+
+  /** Resolve a command name to its n-ary accent character via lookupMap. */
+  const resolveAccent = (cmd: string): string | undefined => lookupMap[cmd];
+
+  let blockIdx = 0;
+  let nextBlockIdx = opSrc.indexOf("defineFunction({", blockIdx);
+  while (nextBlockIdx !== -1) {
+    blockIdx = nextBlockIdx;
+    const blockEnd = opSrc.indexOf("});", blockIdx);
+    const block = opSrc.slice(blockIdx, blockEnd);
+    const parsed = parseOpBlock(block);
+    if (parsed) {
+      const { limits, symbol, names } = parsed;
+      for (const name of names) {
+        if (EXCLUDED_OPS[name]) continue;
+
+        if (limits && symbol) {
+          const accent = resolveAccent(name);
+          if (accent) {
+            naryOps[name] = { accent };
+          } else {
+            excluded[name] = "no resolvable accent in KATEX_SYMBOLS";
+          }
+        } else if (!limits && symbol) {
+          const accent = resolveAccent(name);
+          if (accent) {
+            integralOps[name] = { accent, limitLocationVal: "subSup" };
+          } else {
+            excluded[name] = "no resolvable accent in KATEX_SYMBOLS";
+          }
+        } else if (limits && !symbol) {
+          limitsTextSet.add(name);
+        } else {
+          fnSet.add(name);
+        }
+      }
+    }
+    blockIdx = blockEnd;
+    nextBlockIdx = opSrc.indexOf("defineFunction({", blockIdx);
+  }
+
+  for (const m of macrosSrc.matchAll(/defineMacro\("\\\\(liminf|limsup)",/g)) {
+    limitsTextSet.add(m[1]);
+  }
+
+  for (const name of limitsTextSet) {
+    fnSet.delete(name);
+  }
+  for (const name of Object.keys(naryOps)) {
+    fnSet.delete(name);
+  }
+  for (const name of Object.keys(integralOps)) {
+    fnSet.delete(name);
+  }
+  fnSet.delete("mathop");
+
   const lookupLines = Object.entries(lookupMap)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([k, v]) => `  ${JSON.stringify(k)}: ${JSON.stringify(v)},`)
@@ -191,6 +260,16 @@ const generate = async (): Promise<void> => {
 
   const sourceNote = `KaTeX v${KATEX_VERSION} — regenerate via \`${REGENERATE_CMD}\` (fetches from ${KATEX_BASE}).`;
   const functions = [...fnSet].sort();
+  const formatNAryOps = (ops: Record<string, KatexNAryOp>): string =>
+    Object.entries(ops)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([k, v]) => {
+        const loc = v.limitLocationVal
+          ? `, limitLocationVal: ${JSON.stringify(v.limitLocationVal)}`
+          : "";
+        return `  ${JSON.stringify(k)}: { accent: ${JSON.stringify(v.accent)}${loc} },`;
+      })
+      .join("\n");
 
   writeFileSync(
     join(ROOT, "src/katexData.ts"),
@@ -204,6 +283,18 @@ const generate = async (): Promise<void> => {
       ``,
       `export const KATEX_FUNCTIONS = new Set<string>(${JSON.stringify(functions)});`,
       ``,
+      `export type KatexNAryOp = { accent: string; limitLocationVal?: "subSup" };`,
+      ``,
+      `export const KATEX_NARY_OPS: Record<string, KatexNAryOp> = {`,
+      formatNAryOps(naryOps),
+      `};`,
+      ``,
+      `export const KATEX_INTEGRAL_OPS: Record<string, KatexNAryOp> = {`,
+      formatNAryOps(integralOps),
+      `};`,
+      ``,
+      `export const KATEX_LIMITS_TEXT_OPS = new Set<string>(${JSON.stringify([...limitsTextSet].sort())});`,
+      ``,
     ].join("\n"),
   );
 
@@ -213,6 +304,17 @@ const generate = async (): Promise<void> => {
   console.log(`  overrides: ${Object.keys(overrideMap).length}`);
   console.log(`KATEX_ACCENTS: ${Object.keys(accentMap).length}`);
   console.log(`KATEX_FUNCTIONS: ${fnSet.size}`);
+  console.log(`KATEX_NARY_OPS: ${Object.keys(naryOps).length}`);
+  console.log(`KATEX_INTEGRAL_OPS: ${Object.keys(integralOps).length}`);
+  console.log(`KATEX_LIMITS_TEXT_OPS: ${limitsTextSet.size}`);
+  if (Object.keys(excluded).length > 0) {
+    console.log("Excluded ops:");
+    for (const [cmd, reason] of Object.entries(excluded).sort(([a], [b]) =>
+      a.localeCompare(b),
+    )) {
+      console.log(`  ${cmd}: ${reason}`);
+    }
+  }
 };
 
 generate().catch((error) => {

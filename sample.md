@@ -143,18 +143,6 @@ $$
 \text{Let } x \text{ be a real number.}
 $$
 
-### Colored Math
-
-You can color math expressions using the `\textcolor{color}{math}` command:
-
-$$
-\textcolor{red}{E=mc^2}
-$$
-
-$$
-\textcolor{blue}{\sum_{i=1}^n i}
-$$
-
 ### Math Macros
 
 You can define custom macros:

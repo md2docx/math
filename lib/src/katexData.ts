@@ -670,7 +670,6 @@ export const KATEX_ACCENTS = {
 } as Record<string, string>;
 
 export const KATEX_FUNCTIONS = new Set<string>([
-  "Pr",
   "arccos",
   "arcctg",
   "arcsin",
@@ -688,29 +687,60 @@ export const KATEX_FUNCTIONS = new Set<string>([
   "ctg",
   "cth",
   "deg",
-  "det",
   "dim",
   "exp",
-  "gcd",
   "hom",
-  "inf",
   "ker",
   "lg",
-  "lim",
-  "liminf",
-  "limsup",
   "ln",
   "log",
-  "mathop",
-  "max",
-  "min",
   "sec",
   "sh",
   "sin",
   "sinh",
-  "sup",
   "tan",
   "tanh",
   "tg",
   "th",
+]);
+
+export type KatexNAryOp = { accent: string; limitLocationVal?: "subSup" };
+
+export const KATEX_NARY_OPS: Record<string, KatexNAryOp> = {
+  bigcap: { accent: "⋂" },
+  bigcup: { accent: "⋃" },
+  bigodot: { accent: "⨀" },
+  bigoplus: { accent: "⨁" },
+  bigotimes: { accent: "⨂" },
+  bigsqcup: { accent: "⨆" },
+  biguplus: { accent: "⨄" },
+  bigvee: { accent: "⋁" },
+  bigwedge: { accent: "⋀" },
+  coprod: { accent: "∐" },
+  intop: { accent: "∫" },
+  prod: { accent: "∏" },
+  smallint: { accent: "∫" },
+  sum: { accent: "∑" },
+};
+
+export const KATEX_INTEGRAL_OPS: Record<string, KatexNAryOp> = {
+  iiint: { accent: "∭", limitLocationVal: "subSup" },
+  iint: { accent: "∬", limitLocationVal: "subSup" },
+  int: { accent: "∫", limitLocationVal: "subSup" },
+  oiiint: { accent: "∰", limitLocationVal: "subSup" },
+  oiint: { accent: "∯", limitLocationVal: "subSup" },
+  oint: { accent: "∮", limitLocationVal: "subSup" },
+};
+
+export const KATEX_LIMITS_TEXT_OPS = new Set<string>([
+  "Pr",
+  "det",
+  "gcd",
+  "inf",
+  "lim",
+  "liminf",
+  "limsup",
+  "max",
+  "min",
+  "sup",
 ]);

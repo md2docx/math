@@ -4,7 +4,17 @@ import type * as latex from "@unified-latex/unified-latex-types";
 // skipcq: JS-C1003
 import type * as DOCX from "docx";
 import { parseMath } from "latex-math";
-import { KATEX_ACCENTS, KATEX_FUNCTIONS, KATEX_SYMBOLS } from "./katexData";
+import {
+  KATEX_ACCENTS,
+  KATEX_FUNCTIONS,
+  KATEX_INTEGRAL_OPS,
+  KATEX_LIMITS_TEXT_OPS,
+  KATEX_NARY_OPS,
+  KATEX_SYMBOLS,
+  type KatexNAryOp,
+} from "./katexData";
+
+type DocxApi = typeof DOCX;
 
 /**
  * Checks if the argument has curly brackets.
@@ -14,9 +24,88 @@ const hasCurlyBrackets = (
 ): arg is latex.Argument =>
   Boolean(arg && arg.openMark === "{" && arg.closeMark === "}");
 
-/** convert to MathRun */
-const mapString = (docx: typeof DOCX, s: string): DOCX.MathRun =>
-  new docx.MathRun(s);
+/** Pending n-ary operator awaiting limits and/or integrand body. */
+type PendingNAry = {
+  kind: "nary";
+  accent: string;
+  limitLocationVal?: string;
+  sub: DOCX.MathRun[];
+  sup: DOCX.MathRun[];
+  body: MathComponent[];
+};
+
+/** Pending accent awaiting its base token. */
+type PendingAccent = {
+  kind: "accent";
+  accentChar: string;
+};
+
+/** Pending limits-text operator awaiting a lower limit via subscript. */
+type PendingLimitsTextOp = {
+  kind: "limitsText";
+  name: string;
+};
+
+/** Partial script node for chained sub/superscript attachment. */
+type PendingScript =
+  | {
+      kind: "script";
+      variant: "sub";
+      base: DOCX.MathRun;
+      sub: DOCX.MathRun[];
+    }
+  | {
+      kind: "script";
+      variant: "sup";
+      base: DOCX.MathRun;
+      sup: DOCX.MathRun[];
+    }
+  | {
+      kind: "script";
+      variant: "both";
+      base: DOCX.MathRun;
+      sub: DOCX.MathRun[];
+      sup: DOCX.MathRun[];
+    };
+
+type PendingMarker =
+  | PendingNAry
+  | PendingAccent
+  | PendingLimitsTextOp
+  | PendingScript;
+
+type BinomState =
+  | { phase: "idle" }
+  | { phase: "needFirst" }
+  | { phase: "needSecond"; numerator: DOCX.MathRun[] };
+
+/** Internal mapping state: OMML runs plus binomial context. */
+type MapContext = {
+  runs: MathComponent[];
+  binom: BinomState;
+};
+
+type MathComponent = DOCX.MathRun | PendingMarker;
+
+type MapNodeResult =
+  | { type: "continue"; components: MathComponent[] }
+  | { type: "break" };
+
+type NAryBuild = {
+  accent: string;
+  limitLocationVal?: string;
+  children: DOCX.MathRun[];
+  subScript: DOCX.MathRun[];
+  superScript: DOCX.MathRun[];
+};
+
+/** Cast custom OMML XmlComponents to MathRun for docx library interop. */
+const asMathRun = (component: DOCX.XmlComponent): DOCX.MathRun =>
+  component as unknown as DOCX.MathRun;
+
+/** Build an OMML math run with plain text content. */
+const makeMathRun = (docx: DocxApi, text: string): DOCX.MathRun =>
+  new docx.MathRun(text);
 
 const PLUGIN_ID = "@m2d/math";
 
@@ -31,160 +120,393 @@ const logSkippedEmptyMath = (latex: string, scope: "inline" | "block") => {
 const resolveLatexSymbol = (name: string): string | undefined =>
   KATEX_SYMBOLS[name];
 
-type NAryOptions = {
-  accent: string;
-  limitLocationVal?: string;
-  children?: DOCX.MathRun[];
-  subScript?: DOCX.MathRun[];
-  superScript?: DOCX.MathRun[];
+const isMathRun = (node: MathComponent): node is DOCX.MathRun =>
+  !("kind" in node);
+
+const isPendingNAry = (node: MathComponent | undefined): node is PendingNAry =>
+  Boolean(node && "kind" in node && node.kind === "nary");
+
+const isPendingAccent = (
+  node: MathComponent | undefined,
+): node is PendingAccent =>
+  Boolean(node && "kind" in node && node.kind === "accent");
+
+const isPendingLimitsTextOp = (
+  node: MathComponent | undefined,
+): node is PendingLimitsTextOp =>
+  Boolean(node && "kind" in node && node.kind === "limitsText");
+
+const isPendingScript = (
+  node: MathComponent | undefined,
+): node is PendingScript =>
+  Boolean(node && "kind" in node && node.kind === "script");
+
+/** OMML accent chars must be combining marks (U+0300–U+036F, U+20D0–U+20EF). */
+const OMML_ACCENT_CHARS: Record<string, string> = {
+  hat: "\u0302",
+  widehat: "\u0302",
+  tilde: "\u0303",
+  widetilde: "\u0303",
+  bar: "\u0304",
+  overline: "\u0305",
+  dot: "\u0307",
+  ddot: "\u0308",
+  vec: "\u20D7",
+  acute: "\u0301",
+  grave: "\u0300",
+  breve: "\u0306",
+  check: "\u030C",
+  mathring: "\u030A",
 };
 
-type PendingNAry = DOCX.MathRun & {
-  isNAry: 1;
-  naryAccent: string;
-  naryLimitLoc?: string;
-  sub?: DOCX.MathRun[];
-  sup?: DOCX.MathRun[];
+/** Map KaTeX accent glyphs to OMML combining marks. */
+const KATEX_GLYPH_TO_OMML: Record<string, string> = {
+  ˆ: "\u0302",
+  "^": "\u0302",
+  "˜": "\u0303",
+  "~": "\u0303",
+  ˉ: "\u0304",
+  "¯": "\u0305",
+  "˙": "\u0307",
+  "¨": "\u0308",
+  ˊ: "\u0301",
+  ˋ: "\u0300",
+  "⃗": "\u20D7",
+  "˘": "\u0306",
+  ˇ: "\u030C",
+  "˚": "\u030A",
 };
 
-const NARY_OPERATORS: Record<
-  string,
-  { accent: string; limitLocationVal?: string }
-> = {
-  sum: { accent: "∑" },
-  prod: { accent: "∏" },
-  int: { accent: "∫", limitLocationVal: "subSup" },
-  iint: { accent: "∬", limitLocationVal: "subSup" },
-  iiint: { accent: "∭", limitLocationVal: "subSup" },
-  oint: { accent: "∮", limitLocationVal: "subSup" },
-  oiint: { accent: "∯", limitLocationVal: "subSup" },
-  oiiint: { accent: "∰", limitLocationVal: "subSup" },
-  bigcup: { accent: "⋃" },
-  bigcap: { accent: "⋂" },
-  bigoplus: { accent: "⊕" },
-  bigotimes: { accent: "⊗" },
+/** Resolve accent character for a LaTeX accent command name. */
+const resolveAccentChar = (name: string): string | undefined => {
+  const omml = OMML_ACCENT_CHARS[name];
+  if (omml) return omml;
+  const katexGlyph = KATEX_ACCENTS[name];
+  if (katexGlyph) return KATEX_GLYPH_TO_OMML[katexGlyph];
+  return undefined;
 };
 
-/** Whether a MathRun is a pending n-ary operator awaiting limits or body. */
-const isPendingNAry = (node: DOCX.MathRun | undefined): node is PendingNAry =>
-  Boolean(node && (node as PendingNAry).isNAry);
+const resolveNAryOp = (name: string): KatexNAryOp | undefined =>
+  KATEX_INTEGRAL_OPS[name] ?? KATEX_NARY_OPS[name];
+
+/** True when a macro name maps to an OMML accent combining mark. */
+const isAccentCommand = (name: string): boolean =>
+  resolveAccentChar(name) !== undefined;
+
+/** String nodes may contain unparsed scripts when nested inside braced groups. */
+const UNPARSED_MATH_IN_STRING = /[\^_]|\\[a-zA-Z]/;
+
+const mapStringNode = (docx: DocxApi, content: string): DOCX.MathRun[] =>
+  UNPARSED_MATH_IN_STRING.test(content)
+    ? mapGroup(docx, parseMath(content))
+    : [makeMathRun(docx, content)];
 
 /** Build an OMML n-ary operator element. */
-const buildNAry = (docx: typeof DOCX, options: NAryOptions): DOCX.MathRun => {
-  /** OMML wrapper for n-ary operators such as sum and integral. */
+const buildNAry = (docx: DocxApi, options: NAryBuild): DOCX.MathRun => {
   class MathNAry extends docx.XmlComponent {
     constructor() {
       super("m:nary");
+      // OOXML requires m:sub, m:sup, and m:e in fixed order; all three must
+      // always be present. Always report both limits so docx does not emit
+      // subHide/supHide (which it orders incorrectly in naryPr).
       this.root.push(
         docx.createMathNAryProperties({
           accent: options.accent,
-          hasSuperScript: Boolean(options.superScript),
-          hasSubScript: Boolean(options.subScript),
+          hasSuperScript: true,
+          hasSubScript: true,
           limitLocationVal: options.limitLocationVal,
         }),
       );
-      if (options.subScript) {
-        this.root.push(
-          docx.createMathSubScriptElement({ children: options.subScript }),
-        );
-      }
-      if (options.superScript) {
-        this.root.push(
-          docx.createMathSuperScriptElement({ children: options.superScript }),
-        );
-      }
-      this.root.push(docx.createMathBase({ children: options.children ?? [] }));
+      this.root.push(
+        docx.createMathSubScriptElement({
+          children: options.subScript,
+        }),
+      );
+      this.root.push(
+        docx.createMathSuperScriptElement({
+          children: options.superScript,
+        }),
+      );
+      this.root.push(docx.createMathBase({ children: options.children }));
     }
   }
-  return new MathNAry() as unknown as DOCX.MathRun;
+  return asMathRun(new MathNAry());
+};
+
+/** Build an OMML accent element (m:acc) wrapping base content. */
+const buildMathAccent = (
+  docx: DocxApi,
+  accent: string,
+  children: DOCX.MathRun[],
+): DOCX.MathRun => {
+  class MathAccent extends docx.XmlComponent {
+    constructor() {
+      super("m:acc");
+      this.root.push(
+        new docx.BuilderElement({
+          name: "m:accPr",
+          children: [docx.createMathAccentCharacter({ accent })],
+        }),
+      );
+      this.root.push(docx.createMathBase({ children }));
+    }
+  }
+  return asMathRun(new MathAccent());
+};
+
+/** Resolve accent base content from a macro's first braced argument. */
+const accentChildrenFromArgs = (
+  docx: DocxApi,
+  args: latex.Argument[] | undefined,
+): DOCX.MathRun[] =>
+  hasCurlyBrackets(args?.[0]) ? mapGroup(docx, args[0].content) : [];
+
+/** Build an accent node, deferring base content when the parser omits braced args. */
+const mapAccentMacro = (
+  docx: DocxApi,
+  name: string,
+  args: latex.Argument[] | undefined,
+): MathComponent => {
+  const accentChar = resolveAccentChar(name);
+  if (!accentChar) {
+    return makeMathRun(docx, name);
+  }
+  const children = accentChildrenFromArgs(docx, args);
+  return children.length
+    ? buildMathAccent(docx, accentChar, children)
+    : { kind: "accent", accentChar };
 };
 
 /** Create an n-ary operator placeholder that accepts limits and a body later. */
 const createPendingNAry = (
-  docx: typeof DOCX,
   accent: string,
   limitLocationVal?: string,
+): PendingNAry => ({
+  kind: "nary",
+  accent,
+  limitLocationVal,
+  sub: [],
+  sup: [],
+  body: [],
+});
+
+/** Characters that end an n-ary integrand (e.g. `\int ... dx =`). */
+const terminatesNAryBody = (content: string): boolean =>
+  content === "=" || content === "," || content === ";";
+
+const finalizeBodyRuns = (
+  docx: DocxApi,
+  body: MathComponent[],
+): DOCX.MathRun[] =>
+  body.map((component) =>
+    isMathRun(component) ? component : finalizeComponent(docx, component),
+  );
+
+const finalizeTrailingPendingScriptInBody = (
+  docx: DocxApi,
+  prev: PendingNAry,
 ): PendingNAry => {
-  const node = buildNAry(docx, {
-    accent,
-    limitLocationVal,
-    children: [],
-  }) as PendingNAry;
-  node.isNAry = 1;
-  node.naryAccent = accent;
-  node.naryLimitLoc = limitLocationVal;
-  return node;
+  const body = [...prev.body];
+  const last = body[body.length - 1];
+  if (last && isPendingScript(last)) {
+    body[body.length - 1] = finalizeScript(docx, last);
+  }
+  return { ...prev, body };
 };
 
-/** Attach sub/superscript limits to a pending n-ary operator. */
-const attachNAryLimits = (
-  docx: typeof DOCX,
+const appendToNAryBody = (
+  docx: DocxApi,
   prev: PendingNAry,
-  limits: { subScript?: DOCX.MathRun[]; superScript?: DOCX.MathRun[] },
+  items: MathComponent[],
 ): PendingNAry => {
-  const sub = limits.subScript ?? prev.sub;
-  const sup = limits.superScript ?? prev.sup;
-  const node = buildNAry(docx, {
-    accent: prev.naryAccent,
-    limitLocationVal: prev.naryLimitLoc,
-    children: [],
-    subScript: sub,
-    superScript: sup,
-  }) as PendingNAry;
-  node.isNAry = 1;
-  node.naryAccent = prev.naryAccent;
-  node.naryLimitLoc = prev.naryLimitLoc;
-  node.sub = sub;
-  node.sup = sup;
-  return node;
+  const nary = finalizeTrailingPendingScriptInBody(docx, prev);
+  const body = [...nary.body];
+  const lastBody = body[body.length - 1];
+  const mathRuns = items.filter(isMathRun);
+
+  if (isPendingAccent(lastBody) && mathRuns.length === items.length) {
+    body.pop();
+    body.push(buildMathAccent(docx, lastBody.accentChar, mathRuns));
+    return { ...nary, body };
+  }
+
+  return { ...nary, body: [...body, ...items] };
 };
+
+const applyScriptToNAryBody = (
+  docx: DocxApi,
+  prev: PendingNAry,
+  variant: "sub" | "sup",
+  script: DOCX.MathRun[],
+): PendingNAry => {
+  const body = [...prev.body];
+  const last = body.pop();
+  if (!last) return prev;
+
+  let updated: MathComponent;
+  if (isPendingScript(last)) {
+    if (variant === "sup") {
+      updated =
+        last.variant === "sub"
+          ? finalizeScript(docx, {
+              kind: "script",
+              variant: "both",
+              base: last.base,
+              sub: last.sub,
+              sup: script,
+            })
+          : finalizeScript(docx, last);
+    } else {
+      updated =
+        last.variant === "sup"
+          ? finalizeScript(docx, {
+              kind: "script",
+              variant: "both",
+              base: last.base,
+              sub: script,
+              sup: last.sup,
+            })
+          : finalizeScript(docx, last);
+    }
+  } else if (isMathRun(last)) {
+    updated =
+      variant === "sup"
+        ? { kind: "script", variant: "sup", base: last, sup: script }
+        : { kind: "script", variant: "sub", base: last, sub: script };
+  } else {
+    body.push(last);
+    return prev;
+  }
+
+  body.push(updated);
+  return { ...prev, body };
+};
+
+const finalizePendingNAry = (docx: DocxApi, prev: PendingNAry): DOCX.MathRun =>
+  finalizeNAry(docx, prev, finalizeBodyRuns(docx, prev.body));
+
+const attachNArySub = (
+  prev: PendingNAry,
+  subScript: DOCX.MathRun[],
+): PendingNAry => ({ ...prev, sub: subScript });
+
+const attachNArySup = (
+  prev: PendingNAry,
+  superScript: DOCX.MathRun[],
+): PendingNAry => ({ ...prev, sup: superScript });
 
 const finalizeNAry = (
-  docx: typeof DOCX,
+  docx: DocxApi,
   prev: PendingNAry,
   children: DOCX.MathRun[],
 ): DOCX.MathRun =>
   buildNAry(docx, {
-    accent: prev.naryAccent,
-    limitLocationVal: prev.naryLimitLoc,
+    accent: prev.accent,
+    limitLocationVal: prev.limitLocationVal,
     children,
     subScript: prev.sub,
     superScript: prev.sup,
   });
 
-/** convert group to Math */
-const mapGroup = (docx: typeof DOCX, nodes: latex.Node[]): DOCX.MathRun[] => {
-  const group: DOCX.MathRun[] = [];
-  for (const c of nodes) {
-    // skipcq: JS-0357
-    group.push(...(mapNode(docx, c, group) || []));
+const isScriptMacro = (node: latex.Node): boolean =>
+  node.type === "macro" && (node.content === "_" || node.content === "^");
+
+/** Finalize a trailing script marker before processing the next non-script node. */
+const finalizeTrailingPendingScript = (
+  docx: DocxApi,
+  ctx: MapContext,
+): void => {
+  const last = ctx.runs[ctx.runs.length - 1];
+  if (isPendingScript(last)) {
+    ctx.runs[ctx.runs.length - 1] = finalizeScript(docx, last);
   }
-  return group;
+};
+
+/** Convert unfinalized internal markers to OMML for output. */
+const finalizeComponent = (
+  docx: DocxApi,
+  component: MathComponent,
+): DOCX.MathRun => {
+  if (isMathRun(component)) return component;
+  switch (component.kind) {
+    case "nary":
+      return finalizePendingNAry(docx, component);
+    case "accent":
+      return buildMathAccent(docx, component.accentChar, []);
+    case "limitsText":
+      return makeMathRun(docx, component.name);
+    case "script":
+      return finalizeScript(docx, component);
+  }
+};
+
+const finalizeScript = (
+  docx: DocxApi,
+  pending: PendingScript,
+): DOCX.MathRun => {
+  switch (pending.variant) {
+    case "both":
+      return new docx.MathSubSuperScript({
+        subScript: pending.sub,
+        superScript: pending.sup,
+        children: [pending.base],
+      });
+    case "sub":
+      return new docx.MathSubScript({
+        children: [pending.base],
+        subScript: pending.sub,
+      });
+    case "sup":
+      return new docx.MathSuperScript({
+        children: [pending.base],
+        superScript: pending.sup,
+      });
+  }
+};
+
+const createMapContext = (): MapContext => ({
+  runs: [],
+  binom: { phase: "idle" },
+});
+
+/** convert group to Math */
+const mapGroup = (docx: DocxApi, nodes: latex.Node[]): DOCX.MathRun[] => {
+  const groupCtx = createMapContext();
+  for (const c of nodes) {
+    const result = mapNode(docx, c, groupCtx);
+    if (result.type === "continue") {
+      groupCtx.runs.push(...result.components);
+    }
+  }
+  return groupCtx.runs.map((c) =>
+    isMathRun(c) ? c : finalizeComponent(docx, c),
+  );
 };
 
 /** Handle Macros */
 // skipcq: JS-R1005
 const mapMacro = (
-  docx: typeof DOCX,
+  docx: DocxApi,
   node: latex.Macro,
-  runs: DOCX.MathRun[] & { binomPending?: 0 | 1; binomFirst?: DOCX.MathRun[] },
-): DOCX.MathRun[] | DOCX.MathRun | null => {
-  let returnVal: DOCX.MathRun[] | DOCX.MathRun | null = null;
+  ctx: MapContext,
+): MathComponent[] | MathComponent | null => {
+  let returnVal: MathComponent[] | MathComponent | null = null;
+  const { runs } = ctx;
   switch (node.content) {
     case "newline":
-      returnVal = mapString(docx, " ");
+      returnVal = makeMathRun(docx, " ");
       break;
     case "\\":
-      // line break
       return null;
     case "textcolor": {
       const args = node.args ?? [];
-      // const _color = (hasCurlyBrackets(args[1]) && args[1]?.content?.[0]?.content) || "";
       if (hasCurlyBrackets(args[2])) {
         returnVal = mapGroup(docx, args[2].content);
       }
       break;
     }
+    case "color":
+      return [];
     case "text": {
       const args = node.args ?? [];
       if (hasCurlyBrackets(args[0])) {
@@ -197,76 +519,66 @@ const mapMacro = (
       if (!prev) break;
       const superScript = mapGroup(docx, node.args?.[0]?.content ?? []);
       if (isPendingNAry(prev)) {
-        return attachNAryLimits(docx, prev, { superScript });
-        // @ts-expect-error -- attaching extra field
-      } else if (prev.sub) {
-        return new docx.MathSubSuperScript({
-          // @ts-expect-error -- attaching extra field
-          subScript: prev.sub,
-          superScript,
-          // @ts-expect-error -- attaching extra field
-          children: [prev.prev],
-        });
+        if (prev.body.length === 0) {
+          return attachNArySup(prev, superScript);
+        }
+        return applyScriptToNAryBody(docx, prev, "sup", superScript);
       }
-      const docxNode = new docx.MathSuperScript({
-        children: [prev],
-        superScript,
-      });
-      // @ts-expect-error -- attaching extra field
-      docxNode.sup = superScript;
-      // @ts-expect-error -- attaching extra field
-      docxNode.prev = prev;
-      return docxNode;
+      if (isPendingScript(prev)) {
+        if (prev.variant === "sub") {
+          return finalizeScript(docx, {
+            kind: "script",
+            variant: "both",
+            base: prev.base,
+            sub: prev.sub,
+            sup: superScript,
+          });
+        }
+        return finalizeScript(docx, prev);
+      }
+      if (!isMathRun(prev)) break;
+      return {
+        kind: "script",
+        variant: "sup",
+        base: prev,
+        sup: superScript,
+      };
     }
     case "_": {
       const prev = runs.pop();
       if (!prev) break;
       const subScript = mapGroup(docx, node.args?.[0]?.content ?? []);
-      if (isPendingNAry(prev)) {
-        return attachNAryLimits(docx, prev, { subScript });
-        // @ts-expect-error -- attaching extra field
-      } else if (prev.sup) {
-        return new docx.MathSubSuperScript({
-          subScript,
-          // @ts-expect-error -- attaching extra field
-          superScript: prev.sup,
-          // @ts-expect-error -- attaching extra field
-          children: [prev.prev],
+      if (isPendingLimitsTextOp(prev)) {
+        return new docx.MathLimitLower({
+          children: [makeMathRun(docx, prev.name)],
+          limit: subScript,
         });
       }
-      const docxNode = new docx.MathSubScript({
-        children: [prev],
-        subScript,
-      });
-      // @ts-expect-error -- attaching extra field
-      docxNode.sub = subScript;
-      // @ts-expect-error -- attaching extra field
-      docxNode.prev = prev;
-      return docxNode;
-    }
-    case "hat":
-    case "widehat":
-      returnVal = docx.createMathAccentCharacter({
-        accent: KATEX_ACCENTS[node.content] ?? "^",
-      });
-      break;
-    case "sum":
-    case "prod":
-    case "int":
-    case "iint":
-    case "iiint":
-    case "oint":
-    case "oiint":
-    case "oiiint":
-    case "bigcup":
-    case "bigcap":
-    case "bigoplus":
-    case "bigotimes": {
-      const nary = NARY_OPERATORS[node.content];
-      if (nary) {
-        returnVal = createPendingNAry(docx, nary.accent, nary.limitLocationVal);
+      if (isPendingNAry(prev)) {
+        if (prev.body.length === 0) {
+          return attachNArySub(prev, subScript);
+        }
+        return applyScriptToNAryBody(docx, prev, "sub", subScript);
       }
-      break;
+      if (isPendingScript(prev)) {
+        if (prev.variant === "sup") {
+          return finalizeScript(docx, {
+            kind: "script",
+            variant: "both",
+            base: prev.base,
+            sub: subScript,
+            sup: prev.sup,
+          });
+        }
+        return finalizeScript(docx, prev);
+      }
+      if (!isMathRun(prev)) break;
+      return {
+        kind: "script",
+        variant: "sub",
+        base: prev,
+        sub: subScript,
+      };
     }
     case "frac":
     case "tfrac":
@@ -291,18 +603,15 @@ const mapMacro = (
         hasCurlyBrackets(args[0]) &&
         hasCurlyBrackets(args[1])
       ) {
-        returnVal = [
-          docx.createMathLimitLocation({ value: "undOvr" }),
-          new docx.MathLimitUpper({
-            children: mapGroup(docx, args[1].content),
-            limit: mapGroup(docx, args[0].content),
-          }),
-        ];
+        returnVal = new docx.MathLimitUpper({
+          children: mapGroup(docx, args[1].content),
+          limit: mapGroup(docx, args[0].content),
+        });
       }
       break;
     }
     case "binom":
-      runs.binomPending = 0;
+      ctx.binom = { phase: "needFirst" };
       return [];
     case "sqrt": {
       const args = node.args ?? [];
@@ -312,7 +621,7 @@ const mapMacro = (
         });
       } else if (args.length === 2) {
         returnVal = new docx.MathRadical(
-          args[0].content
+          args[0].content?.length
             ? {
                 children: mapGroup(docx, args[1].content),
                 degree: mapGroup(docx, args[0].content),
@@ -324,17 +633,22 @@ const mapMacro = (
     }
     case "left":
     case "right":
-    case "vec":
     case "boxed":
     case "boldsymbol":
       return [];
     case "mathbf":
       return mapGroup(docx, node.args?.[0]?.content ?? []);
-    default:
-      if (node.content === "overline" || node.content === "widetilde") {
-        returnVal = docx.createMathAccentCharacter({
-          accent: node.content === "overline" ? "¯" : "~",
-        });
+    default: {
+      const naryOp = resolveNAryOp(node.content);
+      if (naryOp) {
+        const pending = runs[runs.length - 1];
+        if (isPendingNAry(pending)) {
+          runs.pop();
+          runs.push(finalizePendingNAry(docx, pending));
+        }
+        returnVal = createPendingNAry(naryOp.accent, naryOp.limitLocationVal);
+      } else if (KATEX_LIMITS_TEXT_OPS.has(node.content)) {
+        returnVal = { kind: "limitsText", name: node.content };
       } else if (
         node.content === "mathrm" ||
         node.content === "mathit" ||
@@ -348,49 +662,45 @@ const mapMacro = (
         if (hasCurlyBrackets(args[0])) {
           returnVal = mapGroup(docx, args[0].content);
         }
-      } else if (KATEX_ACCENTS[node.content]) {
-        returnVal = docx.createMathAccentCharacter({
-          accent: KATEX_ACCENTS[node.content],
-        });
+      } else if (isAccentCommand(node.content)) {
+        returnVal = mapAccentMacro(docx, node.content, node.args);
       } else if (KATEX_FUNCTIONS.has(node.content)) {
-        returnVal = mapString(docx, node.content);
+        returnVal = makeMathRun(docx, node.content);
       } else {
-        returnVal = mapString(
+        returnVal = makeMathRun(
           docx,
           resolveLatexSymbol(node.content) ?? node.content,
         );
       }
+    }
   }
-  if (isPendingNAry(runs[runs.length - 1]) && returnVal) {
-    const prev = runs.pop() as PendingNAry;
-    return [
-      finalizeNAry(
-        docx,
-        prev,
-        Array.isArray(returnVal) ? returnVal : [returnVal],
-      ),
-    ];
+  const last = runs[runs.length - 1];
+  if (isPendingNAry(last) && returnVal) {
+    runs.pop();
+    const items = Array.isArray(returnVal) ? returnVal : [returnVal];
+    return appendToNAryBody(docx, last, items);
   }
   return returnVal;
 };
 
-/** Process node */
-const mapNode = (
-  docx: typeof DOCX,
-  node: latex.Node,
-  runs: DOCX.MathRun[] & { binomPending?: 0 | 1; binomFirst?: DOCX.MathRun[] },
-): DOCX.MathRun[] | false => {
-  if (node.type === "group" && runs.binomPending !== undefined) {
-    const content = mapGroup(docx, node.content);
-    if (runs.binomPending === 0) {
-      runs.binomFirst = content;
-      runs.binomPending = 1;
-      return [];
-    }
-    delete runs.binomPending;
-    const numerator = runs.binomFirst ?? [];
-    delete runs.binomFirst;
-    return [
+const handleBinomialGroup = (
+  docx: DocxApi,
+  node: latex.Group,
+  ctx: MapContext,
+): MapNodeResult | null => {
+  if (ctx.binom.phase === "idle") return null;
+
+  const content = mapGroup(docx, node.content);
+  if (ctx.binom.phase === "needFirst") {
+    ctx.binom = { phase: "needSecond", numerator: content };
+    return { type: "continue", components: [] };
+  }
+
+  const { numerator } = ctx.binom;
+  ctx.binom = { phase: "idle" };
+  return {
+    type: "continue",
+    components: [
       new docx.MathRoundBrackets({
         children: [
           new docx.MathFraction({
@@ -399,68 +709,126 @@ const mapNode = (
           }),
         ],
       }),
-    ];
+    ],
+  };
+};
+
+/** Process node */
+const mapNode = (
+  docx: DocxApi,
+  node: latex.Node,
+  ctx: MapContext,
+): MapNodeResult => {
+  if (!isScriptMacro(node)) {
+    finalizeTrailingPendingScript(docx, ctx);
   }
 
-  let docxNodes: DOCX.MathRun[] = [];
+  if (node.type === "group") {
+    const binomial = handleBinomialGroup(docx, node, ctx);
+    if (binomial) return binomial;
+  }
+
+  let docxNodes: MathComponent[] = [];
   switch (node.type) {
     case "string":
-      docxNodes = [mapString(docx, node.content)];
+      docxNodes = mapStringNode(docx, node.content);
       break;
     case "whitespace":
-      docxNodes = [mapString(docx, " ")];
+      if (isPendingNAry(ctx.runs[ctx.runs.length - 1])) {
+        return { type: "continue", components: [] };
+      }
+      docxNodes = [makeMathRun(docx, " ")];
       break;
     case "macro": {
-      const run = mapMacro(docx, node, runs);
+      const run = mapMacro(docx, node, ctx);
       if (!run) {
-        // line break
-        return false;
-      } else {
-        docxNodes = Array.isArray(run) ? run : [run];
+        return { type: "break" };
       }
+      docxNodes = Array.isArray(run) ? run : [run];
       break;
     }
     case "group":
       docxNodes = mapGroup(docx, node.content);
       break;
     case "environment":
-      // NOT SUPPORTED BY DOCX library
       break;
     default:
+      break;
   }
 
-  if (node.type !== "macro" && isPendingNAry(runs[runs.length - 1])) {
-    const prev = runs.pop() as PendingNAry;
-    return [finalizeNAry(docx, prev, docxNodes)];
+  const last = ctx.runs[ctx.runs.length - 1];
+  if (
+    node.type === "string" &&
+    isPendingNAry(last) &&
+    terminatesNAryBody(node.content)
+  ) {
+    ctx.runs.pop();
+    return {
+      type: "continue",
+      components: [
+        finalizePendingNAry(docx, last),
+        ...mapStringNode(docx, node.content),
+      ],
+    };
   }
 
-  return docxNodes;
+  if (
+    node.type !== "macro" &&
+    node.type !== "whitespace" &&
+    isPendingNAry(last)
+  ) {
+    ctx.runs.pop();
+    return {
+      type: "continue",
+      components: [appendToNAryBody(docx, last, docxNodes)],
+    };
+  }
+
+  const pendingAccent = ctx.runs[ctx.runs.length - 1];
+  if (
+    !isScriptMacro(node) &&
+    node.type !== "whitespace" &&
+    isPendingAccent(pendingAccent)
+  ) {
+    ctx.runs.pop();
+    return {
+      type: "continue",
+      components: [
+        buildMathAccent(
+          docx,
+          pendingAccent.accentChar,
+          docxNodes.filter(isMathRun),
+        ),
+      ],
+    };
+  }
+
+  return { type: "continue", components: docxNodes };
 };
 
 /** Parse latex and convert to DOCX MathRun nodes */
-export const parseLatex = (
-  docx: typeof DOCX,
-  value: string,
-): DOCX.MathRun[][] => {
+export const parseLatex = (docx: DocxApi, value: string): DOCX.MathRun[][] => {
   const latexNodes = parseMath(value);
 
-  const paragraphs: DOCX.MathRun[][] = [[]];
-  let runs: DOCX.MathRun[] & {
-    binomPending?: 0 | 1;
-    binomFirst?: DOCX.MathRun[];
-  } = paragraphs[0];
+  const paragraphs: MathComponent[][] = [[]];
+  let ctx: MapContext = { runs: paragraphs[0], binom: { phase: "idle" } };
 
   for (const node of latexNodes) {
-    const res = mapNode(docx, node, runs);
-    if (!res) {
-      // line break
-      runs = [];
+    const result = mapNode(docx, node, ctx);
+    if (result.type === "break") {
+      const runs: MathComponent[] = [];
       paragraphs.push(runs);
+      ctx = { runs, binom: { phase: "idle" } };
     } else {
-      runs.push(...res);
+      ctx.runs.push(...result.components);
     }
   }
-  return paragraphs;
+
+  return paragraphs.map((paragraph) =>
+    paragraph.map((component) =>
+      isMathRun(component) ? component : finalizeComponent(docx, component),
+    ),
+  );
 };
 
 /**
@@ -473,7 +841,7 @@ export const mathPlugin: () => IPlugin<{
   return {
     inline: (docx, node) => {
       if (node.type !== "inlineMath" && node.type !== "math") return [];
-      (node as unknown as EmptyNode)._type = node.type;
+      (node as EmptyNode)._type = node.type;
       node.type = "";
       const latex = node.value ?? "";
       const children = parseLatex(docx, latex).flat();
