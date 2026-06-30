@@ -137,6 +137,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.1.9
         version: 4.1.9(vitest@4.1.9)
+      '@xarsh/ooxml-validator':
+        specifier: ^0.3.0
+        version: 0.3.0
       docx:
         specifier: ^9.7.1
         version: 9.7.1
@@ -1620,6 +1623,41 @@ packages:
 
   '@vitest/utils@4.1.9':
     resolution: {integrity: sha512-A51o8ymO5PpqlWNnBP9ZHPXDIpuMtTLlGSjN7la4US+LJzoUMyhwjA5QXlm39JexgwHKW4Xjs8Z2d3dLCXOeuA==}
+
+  '@xarsh/ooxml-validator-darwin-arm64@0.3.0':
+    resolution: {integrity: sha512-hgxBf6YzMJCvgEKJN3wVmd4KhIkAx0eCl3ODMoi8a9m8o6N7xE0UKHJFjAku0WhAdbVrZN4w3K5oUVLCC6GnTA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@xarsh/ooxml-validator-darwin-x64@0.3.0':
+    resolution: {integrity: sha512-Mj0IEDx4lnDbz+cWqhbyQ3zrJTrtcOUhgU13qXgM4m1yS+SNhsojwfIw6NfPjeI6QTvh5rq9oocgewBe7W9LYw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@xarsh/ooxml-validator-linux-arm64@0.3.0':
+    resolution: {integrity: sha512-5D8M0PF8J3eIrnUYNiHfOKyjiwnTkWRfcmUMrwMsqzSTBX0LmTRa1QjbIpAwTjKalkGq8nzutSO6eu/UmNothg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@xarsh/ooxml-validator-linux-x64@0.3.0':
+    resolution: {integrity: sha512-GltV9YzcOwLdxhTvw9MIw1kgMbsjnpUvYYaKovDUwMcvwIOlb72Lealp4mZRugLDS1XRDqHbjoChL6Ko+awLpw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@xarsh/ooxml-validator-win32-arm64@0.3.0':
+    resolution: {integrity: sha512-mx7RqjopCZ3mNVlNyPar935FbMA61hOCyIA854L/3trLt4vmj62/spSfjkpgyKx6TKq5/HXTjMf+rNM/WKayaw==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@xarsh/ooxml-validator-win32-x64@0.3.0':
+    resolution: {integrity: sha512-VflQjYjMfq6Up3sclSiVL5p2dVz17RrubZF+QqXhoWCiOPlMlaMN07hx99J6Ngh6TPboAK6TjcuG8DlGIhcp0w==}
+    cpu: [x64]
+    os: [win32]
+
+  '@xarsh/ooxml-validator@0.3.0':
+    resolution: {integrity: sha512-CaAu5dGQj8YKarMUxGMkxnG3ajNQ9IKEYQWsZ2/bZdoE85HVqmLTtfqMySMa0iLHdyRJ6cS7bhF+iMoBpuT6fw==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   acorn@8.17.0:
     resolution: {integrity: sha512-xRQbDb9BnwDafYNn6Vwl839DYVjqXYb1XVGtWAZ1kcDc6iwAL4hg3B1dZlRiuENFeO2H53gFG3in621AdERVAg==}
@@ -4471,6 +4509,33 @@ snapshots:
       '@vitest/pretty-format': 4.1.9
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
+
+  '@xarsh/ooxml-validator-darwin-arm64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator-darwin-x64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator-linux-arm64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator-linux-x64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator-win32-arm64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator-win32-x64@0.3.0':
+    optional: true
+
+  '@xarsh/ooxml-validator@0.3.0':
+    optionalDependencies:
+      '@xarsh/ooxml-validator-darwin-arm64': 0.3.0
+      '@xarsh/ooxml-validator-darwin-x64': 0.3.0
+      '@xarsh/ooxml-validator-linux-arm64': 0.3.0
+      '@xarsh/ooxml-validator-linux-x64': 0.3.0
+      '@xarsh/ooxml-validator-win32-arm64': 0.3.0
+      '@xarsh/ooxml-validator-win32-x64': 0.3.0
 
   acorn@8.17.0: {}
 
