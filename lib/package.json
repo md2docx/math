@@ -23,13 +23,15 @@
     }
   },
   "scripts": {
-    "build": "tsup && tsc -p tsconfig-build.json && gzip -c dist/index.js | wc -c",
+    "build": "tsup && tsc -p tsconfig-build.json && rm -f dist/katexData.d.ts && gzip -c dist/index.js | wc -c",
     "clean": "rm -rf dist",
     "dev": "tsup --watch && tsc -p tsconfig-build.json -w",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "generate:katex": "node --experimental-strip-types scripts/generate-katex-data.ts"
   },
   "devDependencies": {
+    "@xarsh/ooxml-validator": "^0.3.0",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^26.1.0",
