@@ -20,7 +20,7 @@
     "@promptshield/cli": "^1.2.0",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^26.1.0",
-    "turbo": "^2.10.3"
+    "turbo": "^2.10.4"
   },
   "packageManager": "pnpm@11.10.0",
   "engines": {
