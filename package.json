@@ -27,7 +27,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.5.7",
+    "@biomejs/biome": "^2.5.8",
     "pre-commit": "^2.0.0"
   },
   "pnpm": {
