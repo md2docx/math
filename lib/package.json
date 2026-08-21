@@ -36,7 +36,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@unified-latex/unified-latex-types": "^1.8.4",
-    "@vitejs/plugin-react": "^6.0.5",
+    "@vitejs/plugin-react": "^6.1.0",
     "@vitest/coverage-v8": "^4.1.11",
     "docx": "^9.7.1",
     "esbuild-plugin-rdi": "^0.0.0",
