@@ -46,7 +46,7 @@
     "typescript": "^7.0.2",
     "unified": "^11.0.5",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@m2d/core": "^1.7.1",
