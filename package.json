@@ -16,7 +16,7 @@
     "format"
   ],
   "devDependencies": {
-    "@changesets/cli": "^3.0.1",
+    "@changesets/cli": "^3.0.2",
     "@promptshield/cli": "^1.2.0",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^26.4.1",
