@@ -8,3 +8,5 @@ allowBuilds:
   esbuild: true
   pre-commit: true
   sharp: true
+minimumReleaseAgeExclude:
+  - '@next/swc-win32-x64-msvc@16.3.5'
