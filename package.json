@@ -22,7 +22,7 @@
     "@types/node": "^26.6.4",
     "turbo": "^2.11.7"
   },
-  "packageManager": "pnpm@12.8.1",
+  "packageManager": "pnpm@12.9.1",
   "engines": {
     "node": ">=18"
   },
