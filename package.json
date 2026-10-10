@@ -19,7 +19,7 @@
     "@changesets/cli": "^3.0.3",
     "@promptshield/cli": "^1.2.0",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.5",
     "turbo": "^2.11.7"
   },
   "packageManager": "pnpm@12.11.2",
