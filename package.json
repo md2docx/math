@@ -19,15 +19,15 @@
     "@changesets/cli": "^3.0.3",
     "@promptshield/cli": "^1.2.0",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^26.6.5",
-    "turbo": "^2.11.10"
+    "@types/node": "^26.6.6",
+    "turbo": "^2.11.11"
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.5.15",
+    "@biomejs/biome": "^2.6.7",
     "pre-commit": "^2.0.0"
   },
   "pnpm": {
