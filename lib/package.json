@@ -38,7 +38,7 @@
     "@unified-latex/unified-latex-types": "^1.8.4",
     "@vitejs/plugin-react": "^6.3.0",
     "@vitest/coverage-v8": "^5.1.1",
-    "docx": "^9.15.4",
+    "docx": "^9.16.0",
     "esbuild-plugin-rdi": "^0.0.0",
     "jsdom": "^31.0.1",
     "remark-parse": "^11.0.0",
